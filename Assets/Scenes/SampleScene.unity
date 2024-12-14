@@ -161,6 +161,7 @@ MonoBehaviour:
   f_CD: 0
   f_JUMP: 0
   f_SIZE: 0
+  f_WGHT: 0
   ITEM: 1
   WPN: {fileID: 2023390673}
   gravity: 0
