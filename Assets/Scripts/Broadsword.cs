@@ -20,7 +20,10 @@ public class Broadsword : Units
     public float atkAngle;
     private int atkDir;
 
-    public float help;
+    public float currentAngle;
+    Vector3 currentEulerAngles;
+
+    Quaternion currentRotation;
 
 
 
@@ -33,25 +36,39 @@ public class Broadsword : Units
         //lerp angle stuff
         WPN.transform.localEulerAngles += new Vector3(0, 0, Time.deltaTime * CD * atkDir * 20);
 
-        float endAngle = (atkAngle - swingRange);
-        if (endAngle < -180)
-        {
-            endAngle = 360 + (endAngle);
-        }
-        float startAngle = (atkAngle + swingRange);
+        float endAngle;
+        float startAngle;
         switch (atkDir)
         {
-            case -1:             
+            case -1:
+                endAngle = (atkAngle - swingRange);
+                if (endAngle < -180)
+                {
+                    endAngle = 360 + (endAngle);
+                }
+                startAngle = (atkAngle + swingRange);
 
-                if (help <= endAngle)
+                if (currentAngle < endAngle)
                     isSwinging = false; //exit condition
-                Debug.Log("endAngle" + (endAngle));
-                Debug.Log("startAngle" + (startAngle));
-                Debug.Log("WPN.transform.localEulerAngles.z" + (WPN.transform.localEulerAngles.z));
+                //Debug.Log("endAngle" + (endAngle));
+                //Debug.Log("startAngle" + (startAngle));
+                //Debug.Log("WPN.transform.localEulerAngles.z" + (WPN.transform.localEulerAngles.z));
 
 
                 break;
             case 1:
+
+                //endAngle = (atkAngle + swingRange);
+                //if (endAngle > 180)
+                //{
+                //    endAngle = (endAngle) - 360;
+                //}
+                //startAngle = (atkAngle + swingRange);
+                //
+                //if (currentAngle > endAngle)
+                //    isSwinging = false; //exit condition
+                //break;
+
                 if (WPN.transform.localEulerAngles.z >= atkAngle + swingRange)
                     isSwinging = false; //exit condition
                 break;
@@ -126,9 +143,30 @@ public class Broadsword : Units
                 hasNotJumped = true;
             }
 
-            help = WPN.transform.localEulerAngles.z;
-            if (help > 180)
-                help = help - 360;
+
+
+            //TODO: THIS QUARTENION STUFF! YOU CANT JUST USE EULERANGLES
+            //https://docs.unity3d.com/ScriptReference/Quaternion-eulerAngles.html
+
+            currentAngle = WPN.transform.rotation.eulerAngles.z;
+            if (currentAngle > 180)
+                currentAngle = currentAngle - 360;
+
+            currentEulerAngles = WPN.transform.rotation.eulerAngles;
+            if (currentEulerAngles.z > 180)
+                currentEulerAngles.z = currentEulerAngles.z - 360;
+
+            //moving the value of the Vector3 into Quanternion.eulerAngle format
+            currentRotation.eulerAngles = currentEulerAngles;
+
+            //apply the Quaternion.eulerAngles change to the gameObject
+            transform.rotation = currentRotation;
+
+
+
+
+
+
 
             //Attacking
             if (Input.GetAxisRaw("Attack") == 1 && !isSwinging)
@@ -136,10 +174,12 @@ public class Broadsword : Units
                 isSwinging = true;
                 Debug.Log("swing");
                 //get pointing angle
-                atkAngle = WPN.transform.localEulerAngles.z;
+                atkAngle = WPN.transform.rotation.eulerAngles.z;
+                Debug.Log("atkAngle before: " + atkAngle);
                 if (atkAngle > 180)
                     atkAngle = atkAngle - 360;
 
+                Debug.Log("atkAngle after: " + atkAngle);
                 if (mousePos.x < transform.position.x)
                 {
                     atkDir = 1;
