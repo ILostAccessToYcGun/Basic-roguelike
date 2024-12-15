@@ -42,6 +42,7 @@ public class Units : MonoBehaviour
 
     public float gravity;
     protected bool grounded;
+    protected bool hasNotJumped;
 
     public void MoveRight()
     { gameObject.transform.position += new Vector3(1, 0, 0) * f_SPD * Time.deltaTime; }
@@ -56,6 +57,7 @@ public class Units : MonoBehaviour
         {
             CurrentJUMP--;
             grounded = false;
+            hasNotJumped = false;
             gravity = -15; //jump height, can be changed? maybe should be a variable
         }
     }
@@ -64,9 +66,7 @@ public class Units : MonoBehaviour
     {
         transform.position += new Vector3(0, -gravity , 0) * Time.deltaTime;
         if (!grounded)
-        {
             gravity += 10 * f_WGHT * Time.deltaTime;
-        }
         //instead of running an else statement here, I will make it on the collision where the gravity gets reset i think that will cut down on performace 
     }
 
@@ -74,10 +74,11 @@ public class Units : MonoBehaviour
     {
         gravity = 0;
         grounded = true;
+        hasNotJumped = true;
         CurrentJUMP = f_JUMP;
-        
     }
 
+    //TODO: Optimize these calculations theres gonna be a lot of these
     public void PointWeapon(GameObject _weapon, Vector2 target)
     {
         //if we're actually holding a weapon
@@ -90,10 +91,20 @@ public class Units : MonoBehaviour
             // get direction you want to point at
             Vector2 direction = (mouseScreenPosition - (Vector2)transform.position).normalized;
 
+            float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
+
+            if (mouseScreenPosition.x < transform.position.x)
+            {
+                currAngle = 180 - currAngle;
+            }
+
             //TODO: you're gonna have to do some math here... for it to work correctly
 
+            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle);
+
+
             //point the weapon towards the mouse
-            _weapon.transform.localEulerAngles += new Vector3(0, 0, 1);
+            _weapon.transform.localEulerAngles += new Vector3(0, 0, dif - 90);
 
             //evetually i want a thing so that the sword point weapon isnt dead on, cuz thats called a spear
         }
