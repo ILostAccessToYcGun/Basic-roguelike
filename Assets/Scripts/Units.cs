@@ -44,6 +44,8 @@ public class Units : MonoBehaviour
     protected bool grounded;
     protected bool hasNotJumped;
 
+    public Quaternion pointAngle;
+
     public void MoveRight()
     { gameObject.transform.position += new Vector3(1, 0, 0) * f_SPD * Time.deltaTime; }
 
@@ -103,8 +105,9 @@ public class Units : MonoBehaviour
             float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle);
 
 
+            pointAngle.eulerAngles += new Vector3(0, 0, dif - 90);
             //point the weapon towards the mouse
-            _weapon.transform.localEulerAngles += new Vector3(0, 0, dif - 90);
+            _weapon.transform.rotation = pointAngle;
 
             //evetually i want a thing so that the sword point weapon isnt dead on, cuz thats called a spear
         }
