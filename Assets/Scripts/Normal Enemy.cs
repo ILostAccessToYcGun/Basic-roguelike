@@ -90,15 +90,6 @@ public class NormalEnemy : Units
             Debug.Log("i die");
         }
 
-
-
-
-
-
-
-
-        //TODO: If im correct in my code, then this will let enemies see through walls, not very cool...
-
         // Cast a ray from the enemy to the player
         hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 10f, aggroLayerMasks);
         Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.green);
