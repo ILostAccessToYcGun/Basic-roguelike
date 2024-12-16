@@ -10,7 +10,7 @@ public class Units : MonoBehaviour
     //______________________________BASE STATS______________________________//
     //----------Main Stats----------//
     protected int MaxHP;
-    protected int CurrentHP;
+    public int CurrentHP;
     protected int ATK;
     protected int SPD;    
     protected int DEF; //I havent figured out the damage calculation yet
@@ -19,7 +19,7 @@ public class Units : MonoBehaviour
     protected int CD; //(ms)?
     protected int CurrentJUMP;
     protected int JUMP;
-    protected int SIZE; //size multiplier
+    protected float SIZE; //size multiplier
     protected int WGHT;
 
     //______________________________FINAL STATS______________________________//
@@ -32,39 +32,71 @@ public class Units : MonoBehaviour
     //----------Special Stats----------//
     public int f_CD;
     public int f_JUMP;
-    public int f_SIZE;
+    public float f_SIZE;
     public int f_WGHT;
 
     //other stats
     public enum Weapons { Sword, Gun, Bomb, None}
     public Weapons ITEM;
     public GameObject WPN; //ref to the weapon the guy is holding
-
-    public float gravity;
-    protected bool grounded;
-    protected bool hasNotJumped;
-
     public Quaternion pointAngle;
 
-    public void MoveRight()
+    protected float gravity;
+    protected bool grounded = false;
+    protected bool hasNotJumped;
+
+    public bool isAttacked;
+
+    protected Rigidbody2D rb;
+
+    
+
+    protected void InitializeStats()
+    {
+        //main stats
+        CurrentHP = MaxHP;
+        f_MaxHP = MaxHP;
+        f_ATK = ATK;
+        f_SPD = SPD;
+        f_DEF = DEF;
+
+        //special stats
+        CurrentJUMP = JUMP;
+        f_CD = CD;
+        f_JUMP = JUMP;
+        f_SIZE = SIZE;
+        f_WGHT = WGHT;
+
+        ITEM = Weapons.None;
+
+        //set the size of the character
+        transform.localScale = transform.localScale * f_SIZE;
+
+        rb = GetComponent<Rigidbody2D>();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+
+    }
+
+    protected void MoveRight()
     { gameObject.transform.position += new Vector3(1, 0, 0) * f_SPD * Time.deltaTime; }
 
-    public void MoveLeft()
+    protected void MoveLeft()
     { gameObject.transform.position += new Vector3(-1, 0, 0) * f_SPD * Time.deltaTime; }
 
 
-    public void Jump()
+    protected void Jump()
     {
         if (CurrentJUMP != 0)
         {
             CurrentJUMP--;
             grounded = false;
             hasNotJumped = false;
-            gravity = -15; //jump height, can be changed? maybe should be a variable
+            gravity = -7.5f * f_SIZE; //jump height, can be changed? maybe should be a variable
         }
     }
 
-    public void Gravity() //all units are affected by gravity
+    protected void Gravity() //all units are affected by gravity
     {
         transform.position += new Vector3(0, -gravity , 0) * Time.deltaTime;
         if (!grounded)
@@ -72,7 +104,7 @@ public class Units : MonoBehaviour
         //instead of running an else statement here, I will make it on the collision where the gravity gets reset i think that will cut down on performace 
     }
 
-    public void Recover()
+    protected void Recover()
     {
         gravity = 0;
         grounded = true;
@@ -81,7 +113,7 @@ public class Units : MonoBehaviour
     }
 
     //TODO: Optimize these calculations theres gonna be a lot of these
-    public void PointWeapon(GameObject _weapon, Vector2 target)
+    protected void PointWeapon(GameObject _weapon, Vector2 target)
     {
         //if we're actually holding a weapon
         if (_weapon != null)
@@ -100,8 +132,6 @@ public class Units : MonoBehaviour
                 currAngle = 180 - currAngle;
             }
 
-            //TODO: you're gonna have to do some math here... for it to work correctly
-
             float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle);
 
 
@@ -111,5 +141,11 @@ public class Units : MonoBehaviour
 
             //evetually i want a thing so that the sword point weapon isnt dead on, cuz thats called a spear
         }
+    }
+
+    public void TakeDamage(int damageSource)
+    {
+        CurrentHP -= damageSource;
+        isAttacked = true;
     }
 }
