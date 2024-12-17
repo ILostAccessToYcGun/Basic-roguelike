@@ -84,7 +84,6 @@ public class Units : MonoBehaviour
     protected void MoveLeft()
     { gameObject.transform.position += new Vector3(-1, 0, 0) * f_SPD * Time.deltaTime; }
 
-
     protected void Jump()
     {
         if (CurrentJUMP != 0)
