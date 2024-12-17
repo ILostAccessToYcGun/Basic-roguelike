@@ -8,7 +8,6 @@ public class Characters : Units
     protected Vector3 mousePos;
     protected float attackTimer;
     protected int attackDirection = 1;
-
     protected Quaternion currentAngle;
 
     protected void Movement()

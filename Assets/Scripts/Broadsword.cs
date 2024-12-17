@@ -113,7 +113,6 @@ public class Broadsword : Characters
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
             Recover();
-            
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -121,6 +120,4 @@ public class Broadsword : Characters
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
             grounded = false;
     }
-
-
 }

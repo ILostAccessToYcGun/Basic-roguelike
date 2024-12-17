@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class NormalEnemy : Units
 {
-    //FOR NOW, This is how I'm doing AI.
-    //I am randomly choosing an action out of an enum,
-    //randomly choosing the duration for the action and
-    //randomly choosing the cooldown between each decision
-
-    //I know there is a better method online using dots on the screen to do path finding AI
-
-    //For mt version, If the enemy sees the player (raycast)
-    //They will do some vector math and move in the directional vector (in the form of actions)
+    //NEXT STEPS: now that I have finished the normal basic enemy with its ai, I should
+    //1. make it so that enemies can damage the player.
+    //2. make the general enemy class and
+    //3. make sure to modularize it as much as possible.
+    //  E.g make a Deal damage method in the Units class
 
     public enum AI
     {
@@ -64,7 +60,6 @@ public class NormalEnemy : Units
         InitializeStats();
 
         ITEM = Weapons.None;
-
         currentAI = AI.Roaming;
 
         player = FindObjectOfType<Broadsword>();
@@ -205,7 +200,12 @@ public class NormalEnemy : Units
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
             Recover();
+    }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            player.CurrentHP -= f_ATK;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
