@@ -6,25 +6,17 @@ using static NormalEnemy;
 
 public class Enemies : Units
 {
-    //RELOOK OVER THIS PART, I HAVENT FINISHED GOING THROUGH THE NORMAL ENEMY SCRIPT AND MOVING STUFF
-
-
-
-    public Broadsword player; //TODO: I defidently want to try and upcast here
+    public Characters player;
 
     protected RaycastHit2D hit;
     protected LayerMask aggroLayerMasks;
     public float visionRange;
 
-    public enum AI
-    {
-        Roaming,
-        Aggro
-    }
+    public enum AI { Roaming, Aggro }
     protected AI currentAI;
 
     /// <summary>
-    /// Code that checks to see if the enemy has a line of sight to the player
+    /// Line of Sight Check
     /// </summary>
     public void LOStoPlayer()
     {
@@ -43,18 +35,12 @@ public class Enemies : Units
             currentAI = AI.Roaming;
     }
 
-
-
-
-    // Start is called before the first frame update
-    void Start()
+    public void DeathCheck()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //death /destory object later
+        if (CurrentHP <= 0)
+        {
+            Debug.Log("i die");
+        }
     }
 }

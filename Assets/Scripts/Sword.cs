@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    // Start is called before the first frame update
     public NormalEnemy enemyScript;
     private Broadsword playerScript;
 

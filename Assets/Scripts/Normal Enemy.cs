@@ -1,16 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class NormalEnemy : Enemies
 {
-    //NEXT STEPS: now that I have finished the normal basic enemy with its ai, I should
-    //1. make it so that enemies can damage the player.
-    //2. make the general enemy class and
-    //3. make sure to modularize it as much as possible.
-    //  E.g make a Deal damage method in the Units class
-
-
     //TODO: The way im currently doing AI, is by doing speed and time, I think a smarter way of doing this is by picking a random location on the map
     //but thats for a later TODO
     
@@ -29,14 +23,7 @@ public class NormalEnemy : Enemies
     private float MoveLeftDuration; //how long we are doing the action
     private float JumpDuration; //how long we are doing the action
     private float WaitDuration; //how long we are doing the action
-
     private float actionCooldown; //how long between actions are made, counter begins when the action starts
-
-    
-    
-
-    
-
 
     public void NormalAI()
     {
@@ -118,13 +105,12 @@ public class NormalEnemy : Enemies
     }
 
     /// <summary>
-    /// Initialises the stats for the Broadsword Class
+    /// Initialises the stats for the Normal Enemy
     /// </summary>
     public void Awake()
     {
         //main stats
         MaxHP = 20;
-        CurrentHP = MaxHP;
         ATK = 3;
         SPD = 3;
         DEF = 5;
@@ -140,7 +126,7 @@ public class NormalEnemy : Enemies
         ITEM = Weapons.None;
         currentAI = AI.Roaming;
 
-        player = FindObjectOfType<Broadsword>();
+        player = FindObjectOfType<Characters>();
 
         aggroLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
 
@@ -153,21 +139,9 @@ public class NormalEnemy : Enemies
     }
     void Update()
     {
-        //death /destory object later
-        if (CurrentHP <= 0)
-        {
-            Debug.Log("i die");
-        }
-
-
+        DeathCheck();
         LOStoPlayer();
-
-
-
-        //-----------------------AI-----------------------//
-
         NormalAI();
-
         Gravity();
     }
 

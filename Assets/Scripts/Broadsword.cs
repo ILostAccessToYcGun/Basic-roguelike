@@ -7,17 +7,6 @@ using static UnityEditor.Progress;
 
 public class Broadsword : Characters
 {
-    //okay, the unique things about the broadsword class is what weapon it holds, and how it attacks.
-    //im pretty sure im wrong in saying that, cuz enemies might be able to get swords later but for the sake of tempo we keep coding
-
-    //some of these things will want to be moved to a character class, like the mouse position
-
-    //OKAY, im pretty happy with how this is, it is now time to remake the character class
-
-
-
-    //updating the data values because we are the sword class
-
     private float swordSwingRange;
     private float swordSwingIncrement;
     public bool isSwingingSword;
@@ -38,7 +27,6 @@ public class Broadsword : Characters
             PointWeapon(WPN, mousePos);
             currentAngle.eulerAngles -= new Vector3(0, 0, swordSwingRange * attackDirection);
             attackTimer = (3 - (f_CD/100) > 0) ? 3 - (f_CD / 100) : 0.01f;
-            
         }
         else
         {
@@ -88,7 +76,7 @@ public class Broadsword : Characters
             else
                 PointWeapon(WPN, mousePos);
 
-            //Attacking
+            //Attacking TODO: Optimize this later with virtual methods and runtime polymorphism
             if (attackTimer > 0)
                 attackTimer -= Time.deltaTime;
             else
