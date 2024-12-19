@@ -147,4 +147,31 @@ public class Units : MonoBehaviour
         CurrentHP -= damageSource;
         isAttacked = true;
     }
+
+    public void DeathCheck()
+    {
+        //death /destory object later
+        if (CurrentHP <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            Recover();
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
+            Recover();
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
+            Recover();
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
+            collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            grounded = false;
+    }
 }

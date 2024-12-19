@@ -9,7 +9,7 @@ public class Enemies : Units
     public Characters player;
 
     protected RaycastHit2D hit;
-    protected LayerMask aggroLayerMasks;
+    protected LayerMask visionLayerMasks;
     public float visionRange;
 
     public enum AI { Roaming, Aggro }
@@ -21,7 +21,7 @@ public class Enemies : Units
     public void LOStoPlayer()
     {
         // Cast a ray from the enemy to the player
-        hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, visionRange, aggroLayerMasks);
+        hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, visionRange, visionLayerMasks);
         Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.green);
         
         if (hit)// If it hits the player or a wall, if there is a wall or ground inbetween the player and the enemy it will stay Roaming
@@ -35,12 +35,5 @@ public class Enemies : Units
             currentAI = AI.Roaming;
     }
 
-    public void DeathCheck()
-    {
-        //death /destory object later
-        if (CurrentHP <= 0)
-        {
-            Debug.Log("i die");
-        }
-    }
+    
 }

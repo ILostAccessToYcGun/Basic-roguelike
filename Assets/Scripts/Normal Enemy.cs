@@ -9,13 +9,7 @@ public class NormalEnemy : Enemies
     //but thats for a later TODO
     
     
-    public enum Actions 
-    {
-        MoveRight,
-        MoveLeft,
-        Jump,
-        Wait
-    }
+    public enum Actions { MoveRight, MoveLeft, Jump, Wait }
     public List<Actions> actionList;
     public int currentAction;
 
@@ -128,7 +122,7 @@ public class NormalEnemy : Enemies
 
         player = FindObjectOfType<Characters>();
 
-        aggroLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
+        visionLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
 
         visionRange = 10f;
 
@@ -139,27 +133,17 @@ public class NormalEnemy : Enemies
     }
     void Update()
     {
-        DeathCheck();
-        LOStoPlayer();
-        NormalAI();
-        Gravity();
+        if (isActiveAndEnabled)
+        {
+            DeathCheck();
+            LOStoPlayer();
+            NormalAI();
+            Gravity();
+        }
     }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            Recover();
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             player.CurrentHP -= f_ATK;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            grounded = false;
     }
 }
