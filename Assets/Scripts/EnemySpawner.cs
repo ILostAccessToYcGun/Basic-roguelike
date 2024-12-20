@@ -93,7 +93,16 @@ public class EnemySpawner : Enemies
         if (enemiesToSpawn > 0)
         {
             CheckValidSpawnLocation();
-            SpawnEnemy();
+            if (temptimer <= 0)
+            {
+                SpawnEnemy();
+                temptimer = 0.2f;
+            }
+            else
+            {
+                temptimer -=Time.deltaTime;
+            }
+            
         }
         else
         {
