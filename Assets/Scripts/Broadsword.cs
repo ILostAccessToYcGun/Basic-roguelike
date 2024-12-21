@@ -68,6 +68,7 @@ public class Broadsword : Characters
     {
         if (isActiveAndEnabled)
         {
+            DeathCheck();
             Movement();
 
             //if we are swinging, stop pointing and swing

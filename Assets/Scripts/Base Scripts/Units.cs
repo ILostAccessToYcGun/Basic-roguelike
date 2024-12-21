@@ -148,7 +148,7 @@ public class Units : MonoBehaviour
         isAttacked = true;
     }
 
-    public void DeathCheck()
+    public virtual void DeathCheck() //TODO: currently with the virtual overrides (big pog btw) i basically cant use any of the og death check, i wanna fix that somehow
     {
         //death /destory object later
         if (CurrentHP <= 0)

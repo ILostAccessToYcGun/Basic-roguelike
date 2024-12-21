@@ -121,6 +121,8 @@ public class NormalEnemy : Enemies
         currentAI = AI.Roaming;
 
         player = FindObjectOfType<Characters>();
+        stageManager = FindAnyObjectByType<StageManager>();
+        stageManager.UpdateEnemyCount(1);
 
         visionLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
 

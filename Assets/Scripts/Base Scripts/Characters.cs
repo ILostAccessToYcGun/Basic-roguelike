@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class Characters : Units
@@ -12,6 +11,8 @@ public class Characters : Units
 
     protected void Movement()
     {
+        DeathCheck();
+
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //Left or Right
         switch (Input.GetAxisRaw("Horizontal"))
@@ -35,5 +36,16 @@ public class Characters : Units
         //Gravity
         Gravity();
         
+    }
+
+    public override void DeathCheck()
+    {
+        if (CurrentHP <= 0)
+        {
+            //change the game state in the game manager
+            Debug.Log("ur actually so bad at this game");
+            Destroy(gameObject);
+
+        }
     }
 }
