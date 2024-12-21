@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 474706725}
+  - component: {fileID: 474706726}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -153,6 +154,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &474706726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474706724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5b9f58db3bec9147b5ea3039d8d8063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemiesAlive: 0
+  timeToSurvive: 0
+  isStageCleared: 0
+  targetEnemyCount: 0
+  currentClrCon: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +328,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1926399186641239640, guid: 369bc3f66a516484b8f8154d68bfd466, type: 3}
+      propertyPath: enemiesToSpawn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3121005073786678747, guid: 369bc3f66a516484b8f8154d68bfd466, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
