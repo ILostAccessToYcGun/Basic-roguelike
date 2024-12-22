@@ -41,9 +41,9 @@ public class Units : MonoBehaviour
     public GameObject WPN; //ref to the weapon the guy is holding
     public Quaternion pointAngle;
 
-    protected float gravity;
-    protected bool grounded = false;
-    protected bool hasNotJumped;
+    public float gravity;
+    public bool grounded = false;
+    public bool hasNotJumped;
 
     public bool isAttacked;
 
@@ -111,6 +111,21 @@ public class Units : MonoBehaviour
         CurrentJUMP = f_JUMP;
     }
 
+    protected void WallRecover()
+    {
+        if (gravity >= 0)
+        {
+               
+            hasNotJumped = true;
+            CurrentJUMP = f_JUMP;
+        }
+        if (gravity > 5)
+        {
+            gravity = 5;
+            grounded = true;
+        }
+    }
+
     //TODO: Optimize these calculations theres gonna be a lot of these
     protected void PointWeapon(GameObject _weapon, Vector2 target)
     {
@@ -157,14 +172,41 @@ public class Units : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision) //TODO: NEEDS ATTENTION HERE
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            Recover();
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
-            Recover();
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
-            Recover();
+        //Ground Recovery
+        if (gravity >= 10)
+        {
+            if (collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
+            {
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    Recover();
+                else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    Recover();
+                else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                    Recover();
+            }
+        }
+        else //OKAY THIS IS STARTING TO FEEL BETTER, NOW MAKE WALL JUMP, AN ALTERNATIVE TO JUMP
+        {
+            if (collision.transform.position.y + (0.5f * collision.transform.localScale.y) < transform.position.y - (0.5f * f_SIZE))
+            {
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    Recover();
+                else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    Recover();
+                else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                    Recover();
+            }
+        }
+        
+
+        //Wall sliding?
+        if (collision.transform.position.y - (0.5f * collision.transform.localScale.y) < transform.position.y + (0.5f * f_SIZE))
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                WallRecover();
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
