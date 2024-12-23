@@ -12,27 +12,47 @@ public class Characters : Units
     protected void Movement()
     {
         DeathCheck();
-
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //Left or Right
-        switch (Input.GetAxisRaw("Horizontal"))
+        if (!isWallJumping)
         {
-            case -1:
-                MoveLeft();
-                break;
-            case 1:
-                MoveRight();
-                break;
+            switch (Input.GetAxisRaw("Horizontal"))// Left or Right
+            {
+                case -1:
+                    MoveLeft();
+                    break;
+                case 1:
+                    MoveRight();
+                    break;
+            }
         }
+        else
+        {
+            switch (wallJumpDir)
+            {
+                case wallJumpDirection.Left:
+                    MoveLeft();
+                    break;
+                case wallJumpDirection.Right:
+                    MoveRight();
+                    break;
+            }
 
-        //Jump
+            if (wallJumpDuration <= 0)
+            {
+                isWallJumping = false;
+                f_SPD -= SPD / 2;
+            }
+
+            else
+                wallJumpDuration -= Time.deltaTime;
+        }    
+
+        //Jumping
         if ((Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Jump") == 1) && hasNotJumped)
             Jump();
-
-        //basically i wanna force the player to let go of the jump button
         if (Input.GetAxisRaw("Vertical") != 1 && Input.GetAxisRaw("Jump") != 1)
             hasNotJumped = true;
-        
+
         //Gravity
         Gravity();
         

@@ -41,9 +41,18 @@ public class Units : MonoBehaviour
     public GameObject WPN; //ref to the weapon the guy is holding
     public Quaternion pointAngle;
 
+    //TODO: change the access modifiers
     public float gravity;
     public bool grounded = false;
     public bool hasNotJumped;
+    public bool floored = false;
+
+    public bool walled = false;
+    public bool isWallJumping;
+    public float wallJumpDuration;
+    public enum wallJumpDirection { Left, Right }
+    public wallJumpDirection wallJumpDir = wallJumpDirection.Left;
+
 
     public bool isAttacked;
 
@@ -74,8 +83,6 @@ public class Units : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-
     }
 
     protected void MoveRight()
@@ -88,11 +95,46 @@ public class Units : MonoBehaviour
     {
         if (CurrentJUMP != 0)
         {
+            if (walled && !isWallJumping && !floored)
+            {
+                isWallJumping = true;
+                f_SPD += SPD/2;
+                wallJumpDuration = 0.5f;
+            }
             CurrentJUMP--;
             grounded = false;
+            floored = false;
             hasNotJumped = false;
             gravity = -7.5f * f_SIZE; //jump height, can be changed? maybe should be a variable
+
+
+
         }
+    }
+
+    /// <summary>
+    /// This function goes inside the else block of a if (!isWallJumping) {} else {--here--} statement
+    /// </summary>
+    protected void WallJumpMovement()
+    {
+        switch (wallJumpDir)
+        {
+            case wallJumpDirection.Left:
+                MoveLeft();
+                break;
+            case wallJumpDirection.Right:
+                MoveRight();
+                break;
+        }
+
+        if (wallJumpDuration <= 0)
+        {
+            isWallJumping = false;
+            f_SPD -= SPD / 2;
+        }
+
+        else
+            wallJumpDuration -= Time.deltaTime;
     }
 
     protected void Gravity() //all units are affected by gravity
@@ -107,15 +149,23 @@ public class Units : MonoBehaviour
     {
         gravity = 0;
         grounded = true;
+        floored = true;
+        walled = false;
         hasNotJumped = true;
         CurrentJUMP = f_JUMP;
     }
 
-    protected void WallRecover()
+    protected void WallRecover(float wallX)
     {
+        walled = true;
+
+        if ( wallX < transform.position.x)
+            wallJumpDir = wallJumpDirection.Right;
+        else
+            wallJumpDir = wallJumpDirection.Left;
+
         if (gravity >= 0)
-        {
-               
+        { 
             hasNotJumped = true;
             CurrentJUMP = f_JUMP;
         }
@@ -123,8 +173,19 @@ public class Units : MonoBehaviour
         {
             gravity = 5;
             grounded = true;
+            
         }
     }
+
+
+    /*OKay I need to write down some more details on the wall jump
+     * The wall jump will perform a similar height jump as the regular jump, but with speed in the opposite direction as the wall. (needs a refence to the wall we are sliding against)
+     * if we are in a bottom corner (grounded and walled) the system should prioritize jumping regularly first.
+     * being more specific, if the character is sliding to the right of the wall, the character will jump diagonal right,
+     * if the character is sliding to the left of the wall, the character will diagona jump left
+     * when the wall jump happens, the player will not be able to take action directionally for the duration of the jump
+
+    */
 
     //TODO: Optimize these calculations theres gonna be a lot of these
     protected void PointWeapon(GameObject _weapon, Vector2 target)
@@ -175,16 +236,22 @@ public class Units : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision) //TODO: NEEDS ATTENTION HERE
     {
         //Ground Recovery
-        if (gravity >= 10)
+        if (gravity >= 5)
         {
             if (collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
             {
-                if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                    Recover();
-                else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    Recover();
-                else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-                    Recover();
+                //if (collision.transform.position.x + (0.5f * collision.transform.localScale.x) > transform.position.x - (0.5f * f_SIZE) && collision.transform.position.x - (0.5f * collision.transform.localScale.x) < transform.position.x + (0.5f * f_SIZE))
+                if (!(collision.transform.position.x + (0.5f * collision.transform.localScale.x) < transform.position.x - (0.4f * f_SIZE) || collision.transform.position.x - (0.5f * collision.transform.localScale.x) > transform.position.x + (0.4f * f_SIZE))) //TODO: make this not a ! statement
+                {
+                    if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                        Recover();
+                    else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                        Recover();
+                    else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        Recover();
+
+                    Debug.Log("AHHHHHHHHHHHHHHH Ground Recover");
+                }
             }
         }
         else //OKAY THIS IS STARTING TO FEEL BETTER, NOW MAKE WALL JUMP, AN ALTERNATIVE TO JUMP
@@ -197,16 +264,34 @@ public class Units : MonoBehaviour
                     Recover();
                 else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
                     Recover();
+
+                Debug.Log("Basic Ground Recover");
             }
         }
-        
 
-        //Wall sliding?
-        if (collision.transform.position.y - (0.5f * collision.transform.localScale.y) < transform.position.y + (0.5f * f_SIZE))
+        //Wall Recovery
+        if (collision.transform.position.y - (0.5f * collision.transform.localScale.y) < transform.position.y + (0.5f * f_SIZE) &&
+        collision.transform.position.y + (0.5f * collision.transform.localScale.y) > transform.position.y - (0.5f * f_SIZE))
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                WallRecover();
+            if (collision.transform.position.x < transform.position.x - (0.5f * f_SIZE) ||
+            collision.transform.position.x > transform.position.x + (0.5f * f_SIZE))
+            {
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                {
+                    if (!isWallJumping)
+                    {
+                        WallRecover(collision.transform.position.x);
+                        Debug.Log("Wall Recover");
+                    }
+                }
+            }
         }
+
+
+
+
+
+
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -214,6 +299,12 @@ public class Units : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||
             collision.gameObject.layer == LayerMask.NameToLayer("Enemy") ||
             collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
             grounded = false;
+            walled = false;
+            floored = false;
+        }
+            
+
     }
 }

@@ -56,44 +56,93 @@ public class NormalEnemy : Enemies
                     actionCooldown -= Time.deltaTime;
 
 
-                if (MoveRightDuration > 0)
+                if (!isWallJumping)
                 {
-                    MoveRight();
-                    MoveRightDuration -= Time.deltaTime;
+                    if (MoveRightDuration > 0)
+                    {
+                        MoveRight();
+                        MoveRightDuration -= Time.deltaTime;
+                    }
+                    else
+                        actionList.Remove(Actions.MoveRight);
+
+                    if (MoveLeftDuration > 0)
+                    {
+                        MoveLeft();
+                        MoveLeftDuration -= Time.deltaTime;
+                    }
+                    else
+                        actionList.Remove(Actions.MoveLeft);
+
+                    if (JumpDuration > 0)
+                    {
+                        Jump();
+                        JumpDuration -= Time.deltaTime;
+                    }
+                    else
+                        actionList.Remove(Actions.Jump);
+
+                    if (WaitDuration > 0)
+                        WaitDuration -= Time.deltaTime; //do nothing
+                    else
+                        actionList.Remove(Actions.Wait);
                 }
                 else
-                    actionList.Remove(Actions.MoveRight);
-
-                if (MoveLeftDuration > 0)
                 {
-                    MoveLeft();
-                    MoveLeftDuration -= Time.deltaTime;
+                    switch (wallJumpDir)
+                    {
+                        case wallJumpDirection.Left:
+                            MoveLeft();
+                            break;
+                        case wallJumpDirection.Right:
+                            MoveRight();
+                            break;
+                    }
+
+                    if (wallJumpDuration <= 0)
+                    {
+                        isWallJumping = false;
+                        f_SPD -= SPD / 2;
+                    }
+
+                    else
+                        wallJumpDuration -= Time.deltaTime;
                 }
-                else
-                    actionList.Remove(Actions.MoveLeft);
-
-                if (JumpDuration > 0)
-                {
-                    Jump();
-                    JumpDuration -= Time.deltaTime;
-                }
-                else
-                    actionList.Remove(Actions.Jump);
-
-                if (WaitDuration > 0)
-                    WaitDuration -= Time.deltaTime; //do nothing
-                else
-                    actionList.Remove(Actions.Wait);
-
                 break;
-            case AI.Aggro:
-                if (transform.position.x < player.transform.position.x)
-                    MoveRight();
-                else
-                    MoveLeft();
 
-                if (transform.position.y < player.transform.position.y - (0.5f * player.f_SIZE))
-                    Jump();
+            case AI.Aggro:
+                if (!isWallJumping)
+                {
+                    //Left or Right
+                    if (transform.position.x < player.transform.position.x)
+                        MoveRight();
+                    else
+                        MoveLeft();
+
+                    if (transform.position.y < player.transform.position.y - (0.5f * player.f_SIZE))
+                        Jump();
+                }
+                else
+                {
+                    switch (wallJumpDir)
+                    {
+                        case wallJumpDirection.Left:
+                            MoveLeft();
+                            break;
+                        case wallJumpDirection.Right:
+                            MoveRight();
+                            break;
+                    }
+
+                    if (wallJumpDuration <= 0)
+                    {
+                        isWallJumping = false;
+                        f_SPD -= SPD / 2;
+                    }
+
+                    else
+                        wallJumpDuration -= Time.deltaTime;
+                }    
                 break;
         }
     }

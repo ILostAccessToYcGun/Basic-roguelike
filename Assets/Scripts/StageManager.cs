@@ -39,7 +39,7 @@ public class StageManager : MonoBehaviour
             switch (currentClrCon)
             {
                 case ClearCondition.Survive:
-                    if (timeToSurvive <= 0)
+                    if (timeToSurvive < 0)
                     {
                         Debug.Log("YOU HAVE SURVIVED");
                         //Kill all enemies
