@@ -50,7 +50,7 @@ public class Broadsword : Characters
         //special stats
         CD = 300;
         JUMP = 1;
-        SIZE = 2f;
+        jHeight = 2;
         WGHT = 5;
 
 

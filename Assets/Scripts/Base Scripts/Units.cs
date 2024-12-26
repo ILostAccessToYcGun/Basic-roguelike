@@ -17,9 +17,9 @@ public class Units : MonoBehaviour
 
     //----------Special Stats----------//
     protected int CD; //(ms)?
-    protected int CurrentJUMP;
+    protected int currentJUMP;
     protected int JUMP;
-    protected float SIZE; //size multiplier
+    protected int jHeight; //jump height
     protected int WGHT;
 
     //______________________________FINAL STATS______________________________//
@@ -32,7 +32,7 @@ public class Units : MonoBehaviour
     //----------Special Stats----------//
     public int f_CD;
     public int f_JUMP;
-    public float f_SIZE;
+    public int f_jHeight;
     public int f_WGHT;
 
     //other stats
@@ -70,16 +70,14 @@ public class Units : MonoBehaviour
         f_DEF = DEF;
 
         //special stats
-        CurrentJUMP = JUMP;
+        currentJUMP = JUMP;
         f_CD = CD;
         f_JUMP = JUMP;
-        f_SIZE = SIZE;
+        f_jHeight = jHeight;
         f_WGHT = WGHT;
 
         ITEM = Weapons.None;
 
-        //set the size of the character
-        transform.localScale = transform.localScale * f_SIZE;
 
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -93,7 +91,7 @@ public class Units : MonoBehaviour
 
     protected void Jump()
     {
-        if (CurrentJUMP != 0)
+        if (currentJUMP != 0)
         {
             if (walled && !isWallJumping && !floored)
             {
@@ -101,11 +99,11 @@ public class Units : MonoBehaviour
                 f_SPD += SPD/2;
                 wallJumpDuration = 0.5f;
             }
-            CurrentJUMP--;
+            currentJUMP--;
             grounded = false;
             floored = false;
             hasNotJumped = false;
-            gravity = -7.5f * f_SIZE; //jump height, can be changed? maybe should be a variable
+            gravity = -7.5f * f_jHeight; //jump height, can be changed? maybe should be a variable
 
 
 
@@ -152,7 +150,7 @@ public class Units : MonoBehaviour
         floored = true;
         walled = false;
         hasNotJumped = true;
-        CurrentJUMP = f_JUMP;
+        currentJUMP = f_JUMP;
     }
 
     protected void WallRecover(float wallX)
@@ -167,7 +165,7 @@ public class Units : MonoBehaviour
         if (gravity >= 0)
         { 
             hasNotJumped = true;
-            CurrentJUMP = f_JUMP;
+            currentJUMP = f_JUMP;
         }
         if (gravity > 5)
         {
@@ -238,10 +236,10 @@ public class Units : MonoBehaviour
         //Ground Recovery
         if (gravity >= 5)
         {
-            if (collision.transform.position.y < transform.position.y - (0.5f * f_SIZE))
+            if (collision.transform.position.y < transform.position.y - (0.5f * transform.localScale.y))
             {
                 //if (collision.transform.position.x + (0.5f * collision.transform.localScale.x) > transform.position.x - (0.5f * f_SIZE) && collision.transform.position.x - (0.5f * collision.transform.localScale.x) < transform.position.x + (0.5f * f_SIZE))
-                if (!(collision.transform.position.x + (0.5f * collision.transform.localScale.x) < transform.position.x - (0.4f * f_SIZE) || collision.transform.position.x - (0.5f * collision.transform.localScale.x) > transform.position.x + (0.4f * f_SIZE))) //TODO: make this not a ! statement
+                if (!(collision.transform.position.x + (0.5f * collision.transform.localScale.x) < transform.position.x - (0.4f * transform.localScale.y) || collision.transform.position.x - (0.5f * collision.transform.localScale.x) > transform.position.x + (0.4f * transform.localScale.y))) //TODO: make this not a ! statement
                 {
                     if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
                         Recover();
@@ -256,7 +254,7 @@ public class Units : MonoBehaviour
         }
         else //OKAY THIS IS STARTING TO FEEL BETTER, NOW MAKE WALL JUMP, AN ALTERNATIVE TO JUMP
         {
-            if (collision.transform.position.y + (0.5f * collision.transform.localScale.y) < transform.position.y - (0.5f * f_SIZE))
+            if (collision.transform.position.y + (0.5f * collision.transform.localScale.y) < transform.position.y - (0.5f * transform.localScale.y))
             {
                 if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     Recover();
@@ -270,11 +268,11 @@ public class Units : MonoBehaviour
         }
 
         //Wall Recovery
-        if (collision.transform.position.y - (0.5f * collision.transform.localScale.y) < transform.position.y + (0.5f * f_SIZE) &&
-        collision.transform.position.y + (0.5f * collision.transform.localScale.y) > transform.position.y - (0.5f * f_SIZE))
+        if (collision.transform.position.y - (0.5f * collision.transform.localScale.y) < transform.position.y + (0.5f * transform.localScale.y) &&
+        collision.transform.position.y + (0.5f * collision.transform.localScale.y) > transform.position.y - (0.5f * transform.localScale.y))
         {
-            if (collision.transform.position.x < transform.position.x - (0.5f * f_SIZE) ||
-            collision.transform.position.x > transform.position.x + (0.5f * f_SIZE))
+            if (collision.transform.position.x < transform.position.x - (0.5f * transform.localScale.y) ||
+            collision.transform.position.x > transform.position.x + (0.5f * transform.localScale.y))
             {
                 if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 {
