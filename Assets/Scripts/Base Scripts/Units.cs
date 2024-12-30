@@ -32,7 +32,7 @@ public class Units : MonoBehaviour
     //----------Special Stats----------//
     public int f_CD;
     public int f_JUMP;
-    public int f_jHeight;
+    public int f_jHeight; //honestly not really happy with this stat
     public int f_WGHT;
 
     //other stats
@@ -248,7 +248,7 @@ public class Units : MonoBehaviour
                     else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
                         Recover();
 
-                    Debug.Log("AHHHHHHHHHHHHHHH Ground Recover");
+                    //Debug.Log("AHHHHHHHHHHHHHHH Ground Recover");
                 }
             }
         }
@@ -263,7 +263,7 @@ public class Units : MonoBehaviour
                 else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
                     Recover();
 
-                Debug.Log("Basic Ground Recover");
+                //Debug.Log("Basic Ground Recover");
             }
         }
 
@@ -279,7 +279,7 @@ public class Units : MonoBehaviour
                     if (!isWallJumping)
                     {
                         WallRecover(collision.transform.position.x);
-                        Debug.Log("Wall Recover");
+                        //Debug.Log("Wall Recover");
                     }
                 }
             }
