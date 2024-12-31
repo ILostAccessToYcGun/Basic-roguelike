@@ -21,6 +21,7 @@ public class StageManager : MonoBehaviour
     public bool isStageCleared;
 
     public int targetEnemyCount;
+    private BuffManager buffManager;
     private EnemySpawner spawner;
     //public float stageSize;
     public enum ClearCondition { Survive, Eliminate };
@@ -85,7 +86,7 @@ public class StageManager : MonoBehaviour
     private void EndStage()
     {
         isStageCleared = true;
-        //Spawn Buff
+        buffManager.SpawnBuff();
         //Open door to next stage
         //TODO: Update Game manager stage count
     }
@@ -98,10 +99,8 @@ public class StageManager : MonoBehaviour
         targetEnemyCount = 0;
         
         spawner = FindAnyObjectByType<EnemySpawner>();
+        buffManager = FindAnyObjectByType<BuffManager>();
 
-
-        //THIS IS TEMPORARY
-        //TODO: FIX THIS TO ACTUALLY WORK PROPERLY, THIS IS FOR TESTING
         BeginStage();
     }
     void Update()

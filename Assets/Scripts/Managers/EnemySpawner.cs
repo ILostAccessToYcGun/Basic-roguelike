@@ -5,24 +5,13 @@ using UnityEngine;
 public class EnemySpawner : Enemies
 {
     //TODO: change the access modifiers on these once ur done
-    public float temptimer;
+    private float temptimer;
     public int enemiesToSpawn; //public for now, but will be dictated by the stage manager
 
     public Rigidbody2D normalEnemy;
 
-
-
-    //Enemy Spawner
-    //  Make an enemy spawner object with an isTrigger collider.
     //  https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Object.Instantiate.html
-    //{ LOOP }
-    //  when called to spawn enemies:
-    //      
-    //      
-    //      
-    //      AKA if we are in an empty spot and we are above ground, spawn an enemy
-    //      
-    //{ END LOOP } 
+
 
     private void Awake()
     {
