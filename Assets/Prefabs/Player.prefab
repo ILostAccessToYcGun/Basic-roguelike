@@ -335,11 +335,19 @@ MonoBehaviour:
   f_DEF: 0
   f_CD: 0
   f_JUMP: 0
-  f_SIZE: 0
+  f_jHeight: 0
   f_WGHT: 0
   ITEM: 1
   WPN: {fileID: 8060923830479539427}
   pointAngle: {x: 0, y: 0, z: 0, w: 0}
+  gravity: 0
+  grounded: 0
+  hasNotJumped: 0
+  floored: 0
+  walled: 0
+  isWallJumping: 0
+  wallJumpDuration: 0
+  wallJumpDir: 0
   isAttacked: 0
   isSwingingSword: 0
 --- !u!61 &6920849476412664975
