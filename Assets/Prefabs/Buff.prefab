@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 785575962044554162}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5224528, y: 0.5571299, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -152,7 +152,6 @@ MonoBehaviour:
   bm: {fileID: 0}
   rarity: 0
   cursed: 0
-  chance: 0
   outputText: 
 --- !u!50 &6545109060446230745
 Rigidbody2D:

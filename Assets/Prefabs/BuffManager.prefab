@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6870898342328583332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3883635046754019744}
+  - component: {fileID: 3061682135036908449}
+  m_Layer: 0
+  m_Name: BuffManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3883635046754019744
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6870898342328583332}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.6012233, y: 0.5647952, z: -0.020888792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3061682135036908449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6870898342328583332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c372ba6a0363c784a8ae37dd03417dd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buff: {fileID: 6545109060446230745, guid: f2d944a335dd38f43bf6557fc2f7e7b9, type: 3}
+  player: {fileID: 0}
+  statChance: 0
+  GradeCommonChance: 0
+  GradeUncommonChance: 0
+  GradeRareChance: 0
+  GradeEpicChance: 0
+  GradeLegendaryChance: 0
+  MaxHPChance: 0
+  ATKChance: 0
+  SPDChance: 0
+  DEFChance: 0
+  CDChance: 0
+  JUMPChance: 0
+  jHGHTChance: 0

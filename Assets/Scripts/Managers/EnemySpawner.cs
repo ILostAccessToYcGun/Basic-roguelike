@@ -75,6 +75,7 @@ public class EnemySpawner : Enemies
     private void OnTriggerStay2D(Collider2D collision)
     {
         MoveSpawner();
+        temptimer += Time.deltaTime;
     }
 
     private void Update()
@@ -89,7 +90,7 @@ public class EnemySpawner : Enemies
             }
             else
             {
-                temptimer -=Time.deltaTime;
+                temptimer -= Time.deltaTime;
             }
             
         }

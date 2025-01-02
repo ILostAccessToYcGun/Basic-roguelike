@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public Characters player;
+    public float cameraMidPoint;
 
     private void Awake()
     {
@@ -23,6 +24,6 @@ public class CameraMovement : MonoBehaviour
         
         //TODO: okay this is working like I want tit to, but the player is a little shaky, ive run into this problem before and idk how to fix it.
         //maybe a lerp????
-        this.transform.position = new Vector3((player.transform.position.x + (mouseScreenPosition.x - player.transform.position.x) / 2.5f), (player.transform.position.y + (mouseScreenPosition.y - player.transform.position.y) / 2.5f), this.transform.position.z);
+        this.transform.position = new Vector3((player.transform.position.x + (mouseScreenPosition.x - player.transform.position.x) / cameraMidPoint), (player.transform.position.y + (mouseScreenPosition.y - player.transform.position.y) / cameraMidPoint), this.transform.position.z);
     }
 }

@@ -12,7 +12,6 @@ public class BuffManager : MonoBehaviour
     }
 
     public Rigidbody2D buff;
-
     public Characters player;
     public enum Grade { Common, Uncommon, Rare, Epic, Legendary }
     public enum UnitStats { MaxHP, ATK, SPD, DEF, CD, JUMP, jHGHT }
@@ -21,11 +20,11 @@ public class BuffManager : MonoBehaviour
     //this is for later when I let the player manipulate stat odds
     public int statChance;
 
-    public int GradeCommonChance = 45;
-    public int GradeUncommonChance = 25;
-    public int GradeRareChance = 15;
-    public int GradeEpicChance = 10;
-    public int GradeLegendaryChance = 5;
+    public int GradeCommonChance;
+    public int GradeUncommonChance;
+    public int GradeRareChance;
+    public int GradeEpicChance;
+    public int GradeLegendaryChance;
 
     public int MaxHPChance;
     public int ATKChance;
@@ -45,33 +44,19 @@ public class BuffManager : MonoBehaviour
         int chance = Random.Range(0, MaxHPChance + ATKChance + SPDChance + DEFChance + CDChance + JUMPChance + jHGHTChance);
 
         if (chance < MaxHPChance)
-        {
             bs.unitStat = UnitStats.MaxHP;
-        }
         else if (chance < ATKChance + MaxHPChance)
-        {
             bs.unitStat = UnitStats.ATK;
-        }
         else if (chance < SPDChance + MaxHPChance + ATKChance)
-        {
             bs.unitStat = UnitStats.SPD;
-        }
         else if (chance < DEFChance + MaxHPChance + ATKChance + SPDChance)
-        {
             bs.unitStat = UnitStats.DEF;
-        }
         else if (chance < CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
-        {
             bs.unitStat = UnitStats.CD;
-        }
         else if (chance < JUMPChance + CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
-        {
             bs.unitStat = UnitStats.JUMP;
-        }
         else if (chance < jHGHTChance + JUMPChance + CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
-        {
             bs.unitStat = UnitStats.jHGHT;
-        }
     }
 
     private void ResetProbabilities()
@@ -118,6 +103,33 @@ public class BuffManager : MonoBehaviour
                 break;
             case Grade.Legendary:
                 GradeLegendaryChance += chanceModifier;
+                break;
+        }
+    }
+    public void ChangeStatChance(UnitStats stat, int chanceModifier)
+    {
+        switch (stat)
+        {
+            case UnitStats.MaxHP:
+                MaxHPChance += chanceModifier;
+                break;
+            case UnitStats.ATK:
+                ATKChance += chanceModifier;
+                break;
+            case UnitStats.SPD:
+                SPDChance += chanceModifier;
+                break;
+            case UnitStats.DEF:
+                DEFChance += chanceModifier;
+                break;
+            case UnitStats.CD:
+                CDChance += chanceModifier;
+                break;
+            case UnitStats.JUMP:
+                JUMPChance += chanceModifier;
+                break;
+            case UnitStats.jHGHT:
+                jHGHTChance += chanceModifier;
                 break;
         }
     }

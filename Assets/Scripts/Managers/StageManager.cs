@@ -72,22 +72,21 @@ public class StageManager : MonoBehaviour
                 timeToSurvive = Random.Range(20, 40);
                 //Update UI to say survive
                 targetEnemyCount = randomEnemyCount / 2;
-                
                 break;
             case ClearCondition.Eliminate:
                 //Update UI to say kill all
                 targetEnemyCount = randomEnemyCount;
                 break;
         }
-
         spawner.enemiesToSpawn = targetEnemyCount;
     }
 
     private void EndStage()
     {
         isStageCleared = true;
+        //Open door to shop
+        //spawn the shop buffs and crystal stuff
         buffManager.SpawnBuff();
-        //Open door to next stage
         //TODO: Update Game manager stage count
     }
     private void Awake()
