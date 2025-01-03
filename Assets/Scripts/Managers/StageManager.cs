@@ -23,6 +23,7 @@ public class StageManager : MonoBehaviour
     public int targetEnemyCount;
     private BuffManager buffManager;
     private EnemySpawner spawner;
+    private UIManager uiManager;
     //public float stageSize;
     public enum ClearCondition { Survive, Eliminate };
     public ClearCondition currentClrCon;
@@ -30,6 +31,7 @@ public class StageManager : MonoBehaviour
     public void UpdateEnemyCount(int update)
     {
         enemiesAlive += update;
+        uiManager.UpdateUIEnemyCounter();
         CheckClearCondition();
     }
 
@@ -70,11 +72,11 @@ public class StageManager : MonoBehaviour
                 //SET TIME 
                 //TODO: THESE VALUES WILL NEED TO BE TESTED AND CHANGED LATER
                 timeToSurvive = Random.Range(20, 40);
-                //Update UI to say survive
+                uiManager.SurviveUIToggle(true);
                 targetEnemyCount = randomEnemyCount / 2;
                 break;
             case ClearCondition.Eliminate:
-                //Update UI to say kill all
+                uiManager.EliminateEnemiesUIToggle(true);
                 targetEnemyCount = randomEnemyCount;
                 break;
         }
@@ -99,6 +101,7 @@ public class StageManager : MonoBehaviour
         
         spawner = FindAnyObjectByType<EnemySpawner>();
         buffManager = FindAnyObjectByType<BuffManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
 
         BeginStage();
     }
@@ -109,6 +112,7 @@ public class StageManager : MonoBehaviour
             if (currentClrCon == ClearCondition.Survive)
             {
                 timeToSurvive -= Time.deltaTime;
+                uiManager.UpdateUISurviveTimer();
                 CheckClearCondition();
                 if (enemiesAlive < targetEnemyCount)
                     spawner.enabled = true;

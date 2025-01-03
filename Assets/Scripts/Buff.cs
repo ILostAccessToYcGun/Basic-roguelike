@@ -181,7 +181,11 @@ public class Buff : BuffManager
     private void Awake()
     {
         player = FindObjectOfType<Characters>();
-        bm = FindAnyObjectByType<BuffManager>();
+        bm = FindAnyObjectByType<BuffManager>();//WE'VE GOT AN ERROR HERE
+
+        //Right now in testing, the buff is getting a reference to itself, because a buff is a buffmanager because of upcasting
+        //I need to separate the buffs and buff manager to fix this, which is a lot of annoying work
+
         //TODO: TEMPORARY
         GradeCommonChance = bm.GradeCommonChance;
         GradeUncommonChance = bm.GradeUncommonChance;
@@ -198,6 +202,7 @@ public class Buff : BuffManager
         jHGHTChance = bm.jHGHTChance;
         //TEMPORARY
 
+        Debug.Log("Is this being called?");
         RandomizeBuffRarity();
         GenerateBuff(rarity);//IM WIDADWUWY DA GOAT
         outputText = gradeText + buffText;

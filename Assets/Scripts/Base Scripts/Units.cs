@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Units : MonoBehaviour
 {
@@ -53,10 +54,11 @@ public class Units : MonoBehaviour
     public enum wallJumpDirection { Left, Right }
     public wallJumpDirection wallJumpDir = wallJumpDirection.Left;
 
-
     public bool isAttacked;
-
     protected Rigidbody2D rb;
+
+    //UI
+    public Slider hpBar;
 
     
 
@@ -81,6 +83,9 @@ public class Units : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        hpBar = GetComponentInChildren<Slider>();
+        UpdateHPBar();
     }
 
     protected void MoveRight()
@@ -219,6 +224,7 @@ public class Units : MonoBehaviour
     public void TakeDamage(int damageSource)
     {
         CurrentHP -= damageSource;
+        UpdateHPBar();
         isAttacked = true;
     }
 
@@ -229,6 +235,12 @@ public class Units : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void UpdateHPBar()
+    {
+        hpBar.value = (float)CurrentHP / (float)f_MaxHP;
+        //Debug.Log((float)CurrentHP / (float)f_MaxHP);
     }
 
     private void OnCollisionStay2D(Collision2D collision) //TODO: NEEDS ATTENTION HERE
