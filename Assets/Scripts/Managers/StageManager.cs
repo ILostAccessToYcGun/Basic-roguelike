@@ -86,6 +86,7 @@ public class StageManager : MonoBehaviour
     private void EndStage()
     {
         isStageCleared = true;
+        uiManager.StageCleared();
         //Open door to shop
         //spawn the shop buffs and crystal stuff
         buffManager.SpawnBuff();
