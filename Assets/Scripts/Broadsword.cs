@@ -56,6 +56,9 @@ public class Broadsword : Characters
 
         InitializeStats();
 
+        uiManager = FindAnyObjectByType<UIManager>();
+        uiManager.UpdatePlayerStatsUI();
+
         ITEM = Weapons.Sword;
         swordObject = GetComponentInChildren<Sword>();
 
@@ -70,6 +73,7 @@ public class Broadsword : Characters
         {
             DeathCheck();
             Movement();
+            OtherControls();
 
             //if we are swinging, stop pointing and swing
             if (isSwingingSword)

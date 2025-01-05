@@ -1,67 +1,91 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
-public class Buff : BuffManager
+public class Buff : MonoBehaviour
 {
-    public BuffManager bm;
+    private BuffManager bm;
+    private Characters player;
 
-    public Grade rarity;
+    private UIManager uiManager;
+    public Image BuffDescriptionUI;
+    public TextMeshProUGUI RarityText;
+    public TextMeshProUGUI BuffStatsText;
+
+    public BuffManager.Grade rarity;
     public bool cursed;
-    public List<BuffStat> buffStats = new List<BuffStat>();
+    private List<BuffManager.BuffStat> buffStats = new List<BuffManager.BuffStat>();
     //public int chance;
 
-    public string outputText;
+    [SerializeField] string outputText;
     private string gradeText = "";
     private string buffText = "";
 
-    public void RandomizeBuffRarity()
+    private void RandomizeBuffRarity()
     {
-        int chance = Random.Range(0, GradeCommonChance + GradeUncommonChance + GradeRareChance + GradeEpicChance + GradeLegendaryChance);
+        int chance = Random.Range(0, bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance + bm.GradeLegendaryChance);
 
         //giving a random rarity based on how rare it is ( buff manager for chance )
-        if (chance < GradeCommonChance)
+        if (chance < bm.GradeCommonChance)
         {
-            rarity = Grade.Common;
-            gradeText = "Common ";
+            rarity = BuffManager.Grade.Common;
+            RarityText.text = "Common";
+            BuffDescriptionUI.color = new Color(210f / 255f, 210f / 255f, 210f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.white;
         }
-        else if (chance < GradeUncommonChance + GradeCommonChance)
+        else if (chance < bm.GradeUncommonChance + bm.GradeCommonChance)
         {
-            rarity = Grade.Uncommon;
-            gradeText = "Uncommon ";
+            rarity = BuffManager.Grade.Uncommon;
+            RarityText.text = "Uncommon";
+            BuffDescriptionUI.color = new Color(147f / 255f, 255f / 255f, 129f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.green;
         }
-        else if (chance < GradeRareChance + GradeCommonChance + GradeUncommonChance)
+        else if (chance < bm.GradeRareChance + bm.GradeCommonChance + bm.GradeUncommonChance)
         {
-            rarity = Grade.Rare;
-            gradeText = "Rare ";
+            rarity = BuffManager.Grade.Rare;
+            RarityText.text = "Rare";
+            BuffDescriptionUI.color = new Color(100f / 255f, 205f / 255f, 255f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.blue;
         }
-        else if (chance < GradeEpicChance + GradeCommonChance + GradeUncommonChance + GradeRareChance)
+        else if (chance < bm.GradeEpicChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance)
         {
-            rarity = Grade.Epic;
-            gradeText = "Epic ";
+            rarity = BuffManager.Grade.Epic;
+            RarityText.text = "Epic";
+            BuffDescriptionUI.color = new Color(100f / 255f, 205f / 255f, 255f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.magenta;
         }
-        else if (chance < GradeLegendaryChance + GradeCommonChance + GradeUncommonChance + GradeRareChance + GradeEpicChance)
+        else if (chance < bm.GradeLegendaryChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance)
         {
-            rarity = Grade.Legendary;
-            gradeText = "Legendary ";
+            rarity = BuffManager.Grade.Legendary;
+            RarityText.text = "Legendary";
+            BuffDescriptionUI.color = new Color(255f / 255f, 255f / 255f, 100f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.yellow;
+        }
+        else
+        {
+            RarityText.text = "Glitched";
+            BuffDescriptionUI.color = new Color(255f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
+            //BuffDescriptionUI.color = Color.red;
         }
     }
 
-    public void GenerateBuff(Grade rarity)
+    private void GenerateBuff(BuffManager.Grade rarity)
     {
         switch (rarity)
         {
-            case Grade.Common:
-            case Grade.Uncommon:
+            case BuffManager.Grade.Common:
+            case BuffManager.Grade.Uncommon:
                 AddStatsToBuff(1);
                 break;
-            case Grade.Rare:
-            case Grade.Epic:
+            case BuffManager.Grade.Rare:
+            case BuffManager.Grade.Epic:
                 AddStatsToBuff(2);
                 break;
-            case Grade.Legendary:
+            case BuffManager.Grade.Legendary:
                 AddStatsToBuff(3);
                 break;
         }
@@ -69,153 +93,166 @@ public class Buff : BuffManager
 
     private void AddStatsToBuff(int num)
     {
-        BuffStat buffStatistic = new BuffStat();
+        BuffManager.BuffStat buffStatistic = new BuffManager.BuffStat();
         buffStatistic.buffValue = 0;
-        buffStatistic.unitStat = UnitStats.MaxHP;
-        for (int i = 0; i <  num; i++)
+        buffStatistic.unitStat = BuffManager.UnitStats.MaxHP;
+        for (int i = 0; i < num; i++)
         {
+            if (i != 0)
+            {
+                BuffStatsText.text += "<br>";
+            }
             GenerateBuffStatistic(buffStatistic);
             buffStats.Add(buffStatistic);
         }
     }
 
-    private void AssignBuffValue(BuffStat stat, List<int> ranges)
+    private void AssignBuffValue(BuffManager.BuffStat stat, List<int> ranges)
     {
         switch (rarity)
         {
-            case Grade.Common:
+            case BuffManager.Grade.Common:
                 stat.buffValue = Random.Range(ranges[0], ranges[1]);
                 break;
-            case Grade.Uncommon:
+            case BuffManager.Grade.Uncommon:
                 stat.buffValue = Random.Range(ranges[2], ranges[3]);
                 break;
-            case Grade.Rare:
+            case BuffManager.Grade.Rare:
                 stat.buffValue = Random.Range(ranges[4], ranges[5]);
                 break;
-            case Grade.Epic:
+            case BuffManager.Grade.Epic:
                 stat.buffValue = Random.Range(ranges[6], ranges[7]);
                 break;
-            case Grade.Legendary:
+            case BuffManager.Grade.Legendary:
                 stat.buffValue = Random.Range(ranges[8], ranges[9]);
                 break;
         }
     }
 
-    public void RandomizeStatValue (Grade rarity, BuffStat stat)
+    private void RandomizeStatValue (BuffManager.Grade rarity, BuffManager.BuffStat stat)
     {
         switch (stat.unitStat)
         {
-            case UnitStats.MaxHP:
+            case BuffManager.UnitStats.MaxHP:
                 AssignBuffValue(stat, new List<int> { 1, 6, 6, 11, 11, 21, 21, 31, 31, 51 });
-                buffText += " MaxHP: " + stat.buffValue;
+                BuffStatsText.text += "MaxHP +" + stat.buffValue;
                 break;
-            case UnitStats.ATK:
+            case BuffManager.UnitStats.ATK:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 4, 7, 7, 11 });
-                buffText += " ATK: " + stat.buffValue;
+                BuffStatsText.text += "ATK +" + stat.buffValue;
                 break;
-            case UnitStats.SPD:
+            case BuffManager.UnitStats.SPD:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 5, 8, 8, 11 });
-                buffText += " SPD: " + stat.buffValue;
+                BuffStatsText.text += "SPD +" + stat.buffValue;
                 break;
-            case UnitStats.DEF:
+            case BuffManager.UnitStats.DEF:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 4, 7, 7, 11 });
-                buffText += " DEF: " + stat.buffValue;
+                BuffStatsText.text += "DEF +" + stat.buffValue;
                 break;
-            case UnitStats.CD:
+            case BuffManager.UnitStats.CD:
                 //AssignBuffValue(stat, new List<int> {  });
                 switch (rarity)
                 {
-                    case Grade.Common:
-                    case Grade.Uncommon:
-                    case Grade.Rare:
-                    case Grade.Epic:
-                    case Grade.Legendary:
+                    case BuffManager.Grade.Common:
+                    case BuffManager.Grade.Uncommon:
+                    case BuffManager.Grade.Rare:
+                    case BuffManager.Grade.Epic:
+                    case BuffManager.Grade.Legendary:
                         stat.buffValue = 1; //TODO: this needs to change once we rework CD
                         break;
                 }
-                buffText += " CD: " + stat.buffValue;
+                BuffStatsText.text += "CD +" + stat.buffValue;
                 break;
-            case UnitStats.JUMP:
+            case BuffManager.UnitStats.JUMP:
                 AssignBuffValue(stat, new List<int> { 0, 1, 1, 2, 1, 3, 2, 3, 2, 4 });
-                buffText += " JUMP: " + stat.buffValue;
+                BuffStatsText.text += "Jumps +" + stat.buffValue;
                 break;
-            case UnitStats.jHGHT:
+            case BuffManager.UnitStats.jHGHT:
                 AssignBuffValue(stat, new List<int> { 0, 2, 0, 2, 1, 3, 1, 4, 2, 5 });
-                buffText += " jHGHT: " + stat.buffValue;
+                BuffStatsText.text += "Jump Height +" + stat.buffValue;
                 break;
         }
     }
 
-    private void GenerateBuffStatistic(BuffStat buffStatistic)
+    private void GenerateBuffStatistic(BuffManager.BuffStat buffStatistic)
     {
         do
         {
-            PickBuffStat(buffStatistic);
+            bm.PickBuffStat(buffStatistic);
             RandomizeStatValue(rarity, buffStatistic);
         }
         while (buffStatistic.buffValue == 0);//loop if the value is zero
     }
 
-    private void GivePlayerBuff()
+    public void GivePlayerBuff() 
     {
-        foreach (BuffStat stat in buffStats)
+        //TODO: There is an issue here, when there are 2 or more stats present, it specs multiple times into one instead of the listed stats
+        for (int i = 0; i < buffStats.Count; i++)
         {
-            if (stat.unitStat == UnitStats.MaxHP)
-                player.f_MaxHP += stat.buffValue;
-            else if (stat.unitStat == UnitStats.ATK)
-                player.f_ATK += stat.buffValue;
-            else if (stat.unitStat == UnitStats.SPD)
-                player.f_SPD += stat.buffValue;
-            else if (stat.unitStat == UnitStats.DEF)
-                player.f_DEF += stat.buffValue;
-            else if (stat.unitStat == UnitStats.CD)
-                player.f_CD += stat.buffValue;
-            else if (stat.unitStat == UnitStats.JUMP)
-                player.f_JUMP += stat.buffValue;
-            else if (stat.unitStat == UnitStats.jHGHT)
-                player.f_jHeight += stat.buffValue;
+            if (buffStats[i].unitStat == BuffManager.UnitStats.MaxHP)
+            {
+                player.f_MaxHP += buffStats[i].buffValue;
+                player.Heal(player.f_MaxHP - player.CurrentHP);
+            }
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.ATK)
+                player.f_ATK += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.SPD)
+                player.f_SPD += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.DEF)
+                player.f_DEF += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.CD)
+                player.f_CD += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.JUMP)
+                player.f_JUMP += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.jHGHT)
+                player.f_jHeight += buffStats[i].buffValue;
         }
+
+        //foreach (BuffManager.BuffStat stat in buffStats)
+        //{
+        //    if (stat.unitStat == BuffManager.UnitStats.MaxHP)
+        //    {
+        //        player.f_MaxHP += stat.buffValue;
+        //        player.Heal(player.f_MaxHP - player.CurrentHP);
+        //    }
+        //    else if (stat.unitStat == BuffManager.UnitStats.ATK)
+        //        player.f_ATK += stat.buffValue;
+        //    else if (stat.unitStat == BuffManager.UnitStats.SPD)
+        //        player.f_SPD += stat.buffValue;
+        //    else if (stat.unitStat == BuffManager.UnitStats.DEF)
+        //        player.f_DEF += stat.buffValue;
+        //    else if (stat.unitStat == BuffManager.UnitStats.CD)
+        //        player.f_CD += stat.buffValue;
+        //    else if (stat.unitStat == BuffManager.UnitStats.JUMP)
+        //        player.f_JUMP += stat.buffValue;
+        //    else if (stat.unitStat == BuffManager.UnitStats.jHGHT)
+        //        player.f_jHeight += stat.buffValue;
+        //}
+        uiManager.UpdatePlayerStatsUI();
+        Destroy(gameObject);
     }
 
 
     private void Awake()
     {
         player = FindObjectOfType<Characters>();
-        bm = FindAnyObjectByType<BuffManager>();//WE'VE GOT AN ERROR HERE
+        bm = FindAnyObjectByType<BuffManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        BuffStatsText.text = "";
 
-        //Right now in testing, the buff is getting a reference to itself, because a buff is a buffmanager because of upcasting
-        //I need to separate the buffs and buff manager to fix this, which is a lot of annoying work
-
-        //TODO: TEMPORARY
-        GradeCommonChance = bm.GradeCommonChance;
-        GradeUncommonChance = bm.GradeUncommonChance;
-        GradeRareChance = bm.GradeRareChance;
-        GradeEpicChance = bm.GradeEpicChance;
-        GradeLegendaryChance = bm.GradeLegendaryChance;
-
-        MaxHPChance = bm.MaxHPChance;
-        ATKChance = bm.ATKChance;
-        SPDChance = bm.SPDChance;
-        DEFChance = bm.DEFChance;
-        CDChance = bm.CDChance;
-        JUMPChance = bm.JUMPChance;
-        jHGHTChance = bm.jHGHTChance;
-        //TEMPORARY
-
-        Debug.Log("Is this being called?");
         RandomizeBuffRarity();
-        GenerateBuff(rarity);//IM WIDADWUWY DA GOAT
+        GenerateBuff(rarity);
         outputText = gradeText + buffText;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            GivePlayerBuff();
-            Destroy(gameObject);
-        }
-        
+            BuffDescriptionUI.gameObject.SetActive(true);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            BuffDescriptionUI.gameObject.SetActive(false);
     }
 }

@@ -206,12 +206,9 @@ public class Units : MonoBehaviour
             float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
 
             if (mouseScreenPosition.x < transform.position.x)
-            {
                 currAngle = 180 - currAngle;
-            }
 
             float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle);
-
 
             pointAngle.eulerAngles += new Vector3(0, 0, dif - 90);
             //point the weapon towards the mouse
@@ -226,6 +223,15 @@ public class Units : MonoBehaviour
         CurrentHP -= damageSource;
         UpdateHPBar();
         isAttacked = true;
+    }
+
+    public void Heal(int healSource)
+    {
+        if (healSource > f_MaxHP - CurrentHP)
+            CurrentHP += f_MaxHP - CurrentHP;
+        else
+            CurrentHP += healSource;
+        UpdateHPBar();
     }
 
     public virtual void DeathCheck() //TODO: currently with the virtual overrides (big pog btw) i basically cant use any of the og death check, i wanna fix that somehow

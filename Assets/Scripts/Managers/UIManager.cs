@@ -11,11 +11,14 @@ public class UIManager : MonoBehaviour
 {
     //For all the UI Toggles, if you pass in a true variable, it will show the UI, false will Hide the UI
     //I want the managers to be singletons i think.
-    public StageManager stageManager;
+    private StageManager stageManager;
+    private Characters player;
+    
 
     private void Awake()
     {
         stageManager = FindAnyObjectByType<StageManager>();
+        player = FindAnyObjectByType<Characters>();
 
         if (StageClearUI != null )
         {
@@ -28,6 +31,18 @@ public class UIManager : MonoBehaviour
             fadeBool = false;
             //hasFadedin = false;
         }
+
+        //hmmmmm
+        //if (PlayerStatsUI != null )
+        //{
+        //    HPText = get;
+        //    ATKText;
+        //    SPDText;
+        //    DEFText;
+        //    CDText;
+        //    JUMPText;
+        //    jHeightText;
+        //}
     }
 
     private void Update()
@@ -102,6 +117,14 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("ReturnToMainMenu");
         //change scene
+    }
+
+    public void ButtonPlayerStats()
+    {
+        Debug.Log("PlayerStats");
+        PlayerStatsUIToggle(true);
+        PauseMenuToggle(false);
+        //TODO:change game state?
     }
     #endregion
 
@@ -214,5 +237,24 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    #region PlayerStatsUI
+    public GameObject PlayerStatsUI;
+    public TextMeshProUGUI StatText;
+    public void PlayerStatsUIToggle(bool turnOn)
+    {
+        PlayerStatsUI.SetActive(turnOn);
+    }
+    
+    public void UpdatePlayerStatsUI()
+    {
+        StatText.text = "HP: " + player.f_MaxHP + 
+            "<br>ATK: " + player.f_ATK + 
+            "<br>SPD: " + player.f_SPD + 
+            "<br>DEF: " + player.f_DEF + 
+            "<br>CD: " + player.f_CD + 
+            "<br>Jumps: " + player.f_JUMP + 
+            "<br>Jump Height: " + player.f_jHeight;
+    }
 
+    #endregion
 }

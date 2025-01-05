@@ -12,7 +12,8 @@ public class BuffManager : MonoBehaviour
     }
 
     public Rigidbody2D buff;
-    public Characters player;
+    
+    
     public enum Grade { Common, Uncommon, Rare, Epic, Legendary }
     public enum UnitStats { MaxHP, ATK, SPD, DEF, CD, JUMP, jHGHT }
     //public enum GameStats { EnemyCount, StageSize }//?
@@ -131,6 +132,17 @@ public class BuffManager : MonoBehaviour
             case UnitStats.jHGHT:
                 jHGHTChance += chanceModifier;
                 break;
+        }
+    }
+
+
+    //TESTING
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            SpawnBuff();
         }
     }
 }
