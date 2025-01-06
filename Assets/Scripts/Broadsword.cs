@@ -57,7 +57,6 @@ public class Broadsword : Characters
         InitializeStats();
 
         uiManager = FindAnyObjectByType<UIManager>();
-        uiManager.UpdatePlayerStatsUI();
 
         ITEM = Weapons.Sword;
         swordObject = GetComponentInChildren<Sword>();
@@ -65,6 +64,11 @@ public class Broadsword : Characters
         isSwingingSword = false;
         swordSwingRange = 45;
         swordSwingIncrement = swordSwingRange/(500 - f_CD);
+    }
+
+    private void Start()
+    {
+        uiManager.UpdatePlayerStatsUI(); //grrrrrrrrrr
     }
 
     private void Update()

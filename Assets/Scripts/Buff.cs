@@ -55,7 +55,7 @@ public class Buff : MonoBehaviour
         {
             rarity = BuffManager.Grade.Epic;
             RarityText.text = "Epic";
-            BuffDescriptionUI.color = new Color(100f / 255f, 205f / 255f, 255f / 255f, 255f / 255f);
+            BuffDescriptionUI.color = new Color(205f / 255f, 100f / 255f, 255f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.magenta;
         }
         else if (chance < bm.GradeLegendaryChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance)

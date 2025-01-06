@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Characters : Units
 {
-    protected UIManager uiManager;
+    public UIManager uiManager;
     public Buff currentBuff;
 
     protected Vector3 mousePos;

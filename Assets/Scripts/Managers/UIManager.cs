@@ -13,12 +13,14 @@ public class UIManager : MonoBehaviour
     //I want the managers to be singletons i think.
     private StageManager stageManager;
     private Characters player;
+    private BuffManager buffManager;
     
 
     private void Awake()
     {
         stageManager = FindAnyObjectByType<StageManager>();
         player = FindAnyObjectByType<Characters>();
+        buffManager = FindAnyObjectByType<BuffManager>();
 
         if (StageClearUI != null )
         {
@@ -247,13 +249,83 @@ public class UIManager : MonoBehaviour
     
     public void UpdatePlayerStatsUI()
     {
-        StatText.text = "HP: " + player.f_MaxHP + 
+        StatText.text = "HP: " + player.f_MaxHP +  // i think the issyue nulkl ref is for the player
             "<br>ATK: " + player.f_ATK + 
             "<br>SPD: " + player.f_SPD + 
             "<br>DEF: " + player.f_DEF + 
             "<br>CD: " + player.f_CD + 
             "<br>Jumps: " + player.f_JUMP + 
             "<br>Jump Height: " + player.f_jHeight;
+    }
+
+    #endregion
+
+    #region RarityCrystalUI(Purple)
+    //I feel like I should move this code to a sperate script to avoid too much clutter, because I need 10 methods for this one and another 14 methods for the second crystal
+    public GameObject RarityCrystalUI;
+    public TextMeshProUGUI percentages;
+    public void RarityCrystalUIToggle(bool turnOn)
+    {
+        RarityCrystalUI.SetActive(turnOn);
+    }
+
+    public void UpdateRarityChanceUI()
+    {
+        percentages.text = buffManager.GradeCommonChance + "%<br>" + buffManager.GradeUncommonChance + "%<br>" + buffManager.GradeRareChance + "%<br>" + buffManager.GradeEpicChance + "%<br>" + buffManager.GradeLegendaryChance + "%";
+    }
+
+    public void CommonPlus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Common, 1);
+        UpdateRarityChanceUI();
+    }
+    public void CommonMinus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Common, -1);
+        UpdateRarityChanceUI();
+    }
+    public void UncommonPlus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Uncommon, 1);
+        UpdateRarityChanceUI();
+    }
+    public void UncommonMinus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Uncommon, -1);
+        UpdateRarityChanceUI();
+    }
+
+    public void RarePlus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Rare, 1);
+        UpdateRarityChanceUI();
+    }
+    public void RareMinus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Rare, -1);
+        UpdateRarityChanceUI();
+    }
+
+    public void EpicPlus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Epic, 1);
+        UpdateRarityChanceUI();
+    }
+    public void EpicMinus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Epic, -1);
+        UpdateRarityChanceUI();
+    }
+
+    public void LegendaryPlus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Legendary, 1);
+        UpdateRarityChanceUI();
+    }
+    public void LegendaryMinus()
+    {
+        buffManager.ChangeGradeChance(BuffManager.Grade.Legendary, -1);
+        UpdateRarityChanceUI();
     }
 
     #endregion
