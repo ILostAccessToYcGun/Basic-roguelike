@@ -26,6 +26,7 @@ public class BuffManager : MonoBehaviour
     public int GradeRareChance;
     public int GradeEpicChance;
     public int GradeLegendaryChance;
+    public int GradeTotalChance;
 
     public int MaxHPChance;
     public int ATKChance;
@@ -34,6 +35,7 @@ public class BuffManager : MonoBehaviour
     public int CDChance;
     public int JUMPChance;
     public int jHGHTChance;
+    public int StatTotalChance;
 
     private void Awake()
     {
@@ -67,6 +69,7 @@ public class BuffManager : MonoBehaviour
         GradeRareChance = 15;
         GradeEpicChance = 10;
         GradeLegendaryChance = 5;
+        TotalGradeChance();
 
         MaxHPChance = 10;
         ATKChance = 10;
@@ -75,6 +78,7 @@ public class BuffManager : MonoBehaviour
         CDChance = 10;
         JUMPChance = 10;
         jHGHTChance = 10;
+        TotalStatChance();
     }
 
     public void SpawnBuff()
@@ -91,48 +95,73 @@ public class BuffManager : MonoBehaviour
         switch (grade)
         {
             case Grade.Common:
-                GradeCommonChance += chanceModifier;
+                if (GradeCommonChance + chanceModifier >= 0)
+                    GradeCommonChance += chanceModifier;
                 break;
             case Grade.Uncommon:
-                GradeUncommonChance += chanceModifier;
+                if (GradeUncommonChance + chanceModifier >= 0)
+                    GradeUncommonChance += chanceModifier;
                 break;
             case Grade.Rare:
-                GradeRareChance += chanceModifier;
+                if (GradeRareChance + chanceModifier >= 0)
+                    GradeRareChance += chanceModifier;
                 break;
             case Grade.Epic:
-                GradeEpicChance += chanceModifier;
+                if (GradeLegendaryChance + chanceModifier >= 0)
+                    GradeEpicChance += chanceModifier;
                 break;
             case Grade.Legendary:
-                GradeLegendaryChance += chanceModifier;
+                if (GradeLegendaryChance + chanceModifier >= 0)
+                    GradeLegendaryChance += chanceModifier;
                 break;
         }
+        TotalGradeChance();
+
+    }
+
+    public void TotalGradeChance()
+    {
+        GradeTotalChance = GradeCommonChance + GradeUncommonChance + GradeRareChance + GradeEpicChance + GradeLegendaryChance;
     }
     public void ChangeStatChance(UnitStats stat, int chanceModifier)
     {
         switch (stat)
         {
             case UnitStats.MaxHP:
-                MaxHPChance += chanceModifier;
+                if (MaxHPChance + chanceModifier >= 0)
+                    MaxHPChance += chanceModifier;
                 break;
             case UnitStats.ATK:
-                ATKChance += chanceModifier;
+                if (ATKChance + chanceModifier >= 0)
+                    ATKChance += chanceModifier;
                 break;
             case UnitStats.SPD:
-                SPDChance += chanceModifier;
+                if (SPDChance + chanceModifier >= 0)
+                    SPDChance += chanceModifier;
                 break;
             case UnitStats.DEF:
-                DEFChance += chanceModifier;
+                if (DEFChance + chanceModifier >= 0)
+                    DEFChance += chanceModifier;
                 break;
             case UnitStats.CD:
-                CDChance += chanceModifier;
+                if (CDChance + chanceModifier >= 0)
+                    CDChance += chanceModifier;
                 break;
             case UnitStats.JUMP:
-                JUMPChance += chanceModifier;
+                if (JUMPChance + chanceModifier >= 0)
+                    JUMPChance += chanceModifier;
                 break;
             case UnitStats.jHGHT:
-                jHGHTChance += chanceModifier;
+                if (jHGHTChance + chanceModifier >= 0)
+                    jHGHTChance += chanceModifier;
                 break;
         }
+        TotalStatChance();
+    }
+
+    public void TotalStatChance()
+    {
+        StatTotalChance = MaxHPChance + ATKChance + SPDChance + DEFChance + CDChance + JUMPChance + jHGHTChance;
     }
 
 
