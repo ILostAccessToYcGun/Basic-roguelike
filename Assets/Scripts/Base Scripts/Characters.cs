@@ -5,7 +5,9 @@ using UnityEngine;
 public class Characters : Units
 {
     public UIManager uiManager;
-    public Buff currentBuff;
+    public Buff currentBuff; //eventually I should make this general to include all interactables
+    public ShopKeeper shopKeeper;
+
 
     protected Vector3 mousePos;
     protected float attackTimer;
@@ -78,13 +80,21 @@ public class Characters : Units
             //TODO: game manager change state here
         }
 
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F) && notUsedBuffYet)
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F))
         {
-            if (currentBuff != null)
+            if (notUsedBuffYet)
             {
-                notUsedBuffYet = false;
-                currentBuff.GivePlayerBuff();
+                if (currentBuff != null)
+                {
+                    notUsedBuffYet = false;
+                    currentBuff.GivePlayerBuff();
+                }
             }
+            if (shopKeeper != null)
+            {
+                shopKeeper.InteractWithShopKeeper();
+            }
+            
         }
         if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.F))
         {
@@ -109,6 +119,10 @@ public class Characters : Units
         {
             currentBuff = collision.gameObject.GetComponent<Buff>();
         }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("ShopKeeper"))
+        {
+            shopKeeper = collision.gameObject.GetComponent<ShopKeeper>();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -116,6 +130,10 @@ public class Characters : Units
         if (collision.gameObject.layer == LayerMask.NameToLayer("Buff"))
         {
             currentBuff = null;
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("ShopKeeper"))
+        {
+            shopKeeper = null;
         }
     }
 }

@@ -18,11 +18,11 @@ public class Crystals : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            CrystalUI.gameObject.SetActive(true);
+            CrystalUI.SetActive(true);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            CrystalUI.gameObject.SetActive(false);
+            CrystalUI.SetActive(false);
     }
 }
