@@ -8,6 +8,7 @@ public class RarityCrystal : Crystals
     private void Start()
     {
         UpdateRarityChanceUI();
+        cam = FindAnyObjectByType<CameraMovement>();
     }
     public void UpdateRarityChanceUI()
     {

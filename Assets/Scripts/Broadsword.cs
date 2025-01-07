@@ -26,11 +26,12 @@ public class Broadsword : Characters
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             PointWeapon(WPN, mousePos);
             currentAngle.eulerAngles -= new Vector3(0, 0, swordSwingRange * attackDirection);
-            attackTimer = (3 - (f_CD/100) > 0) ? 3 - (f_CD / 100) : 0.01f;
+            //attackTimer = (3 - (f_CD/100) > 0) ? 3 - (f_CD / 100) : 0.01f; //getting rid of the in between attack cd because it feels really bad on sword, this will need to exist on projectile weapons
+            attackTimer = 0.01f;
         }
         else
         {
-            currentAngle.eulerAngles += new Vector3(0, 0, swordSwingIncrement * attackDirection);
+            currentAngle.eulerAngles += new Vector3(0, 0, (swordSwingRange / (500 - f_CD)) * attackDirection);
             swordSwingFrame++;
         }
         WPN.transform.rotation = currentAngle;
@@ -63,7 +64,7 @@ public class Broadsword : Characters
 
         isSwingingSword = false;
         swordSwingRange = 45;
-        swordSwingIncrement = swordSwingRange/(500 - f_CD);
+        //swordSwingIncrement = ;
     }
 
     private void Start()

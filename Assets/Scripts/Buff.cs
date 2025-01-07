@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
-public class Buff : MonoBehaviour
+public class Buff : HoverableInteractables
 {
     private BuffManager bm;
     private Characters player;
@@ -55,7 +55,7 @@ public class Buff : MonoBehaviour
         {
             rarity = BuffManager.Grade.Epic;
             RarityText.text = "Epic";
-            BuffDescriptionUI.color = new Color(205f / 255f, 100f / 255f, 255f / 255f, 255f / 255f);
+            BuffDescriptionUI.color = new Color(200f / 255f, 100f / 255f, 255f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.magenta;
         }
         else if (chance < bm.GradeLegendaryChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance)
@@ -238,21 +238,11 @@ public class Buff : MonoBehaviour
         player = FindObjectOfType<Characters>();
         bm = FindAnyObjectByType<BuffManager>();
         uiManager = FindAnyObjectByType<UIManager>();
+        cam = FindAnyObjectByType<CameraMovement>();
         BuffStatsText.text = "";
 
         RandomizeBuffRarity();
         GenerateBuff(rarity);
         outputText = gradeText + buffText;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            BuffDescriptionUI.gameObject.SetActive(true);
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            BuffDescriptionUI.gameObject.SetActive(false);
     }
 }

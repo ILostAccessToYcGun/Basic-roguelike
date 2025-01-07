@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ShopKeeper : MonoBehaviour
+public class ShopKeeper : HoverableInteractables
 {
     public GameObject DialogueUI;
     public GameObject InteractUI;
     public TextMeshProUGUI DialogueText;
-    private bool isTalking;
+    public bool isTalking;
     private float dialogueTimer;
 
-    
     public void ChangeDialogueText(string dialogue)
     {
         DialogueText.text = dialogue;
@@ -22,21 +21,28 @@ public class ShopKeeper : MonoBehaviour
         isTalking = true;
         dialogueTimer = 3f;
         InteractUI.SetActive(false);
+        cam.RemovePOI(InteractUI);
         DialogueUI.SetActive(true);
+        cam.AddPOI(DialogueUI);
+    }
 
+    private void Awake()
+    {
+        cam = FindAnyObjectByType<CameraMovement>();
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
             if (!isTalking && InteractUI.activeSelf == false)
             {
                 InteractUI.SetActive(true);
+                cam.AddPOI(InteractUI);
             }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            InteractUI.SetActive(false);
+            distanceToPlayer = Mathf.Abs(collision.gameObject.transform.position.x - transform.position.x);
+            CalculateFade();
+        }
+            
     }
 
     private void Update()
@@ -48,6 +54,7 @@ public class ShopKeeper : MonoBehaviour
         else
         {
             DialogueUI.SetActive(false);
+            cam.RemovePOI(DialogueUI);
             isTalking = false;
         }
     }

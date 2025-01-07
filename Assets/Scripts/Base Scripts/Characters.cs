@@ -15,7 +15,7 @@ public class Characters : Units
     protected Quaternion currentAngle;
 
     protected bool isEscapeReleased;
-    protected bool notUsedBuffYet;
+    protected bool notUsedBuffYet = true;
 
     protected void Movement()
     {
@@ -82,19 +82,15 @@ public class Characters : Units
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F))
         {
-            if (notUsedBuffYet)
+            if (currentBuff != null && notUsedBuffYet)
             {
-                if (currentBuff != null)
-                {
-                    notUsedBuffYet = false;
-                    currentBuff.GivePlayerBuff();
-                }
+                notUsedBuffYet = false;
+                currentBuff.GivePlayerBuff();
             }
-            if (shopKeeper != null)
+            if (shopKeeper != null && !shopKeeper.isTalking)
             {
                 shopKeeper.InteractWithShopKeeper();
             }
-            
         }
         if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.F))
         {

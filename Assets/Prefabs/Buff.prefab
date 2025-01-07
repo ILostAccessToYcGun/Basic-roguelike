@@ -199,7 +199,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 3
 --- !u!114 &3572227251255073273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +212,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf79f4598f2b454d9f1affd66762489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popUpUI: {fileID: 8684349866153361166}
+  userInterfaces:
+  - {fileID: 8684349866153361166}
+  texts:
+  - {fileID: 2604594953119763071}
+  - {fileID: 1798897515766353693}
+  fadeDistance: 1.5
+  unFadeWidth: 1
   BuffDescriptionUI: {fileID: 8684349866153361166}
   RarityText: {fileID: 2604594953119763071}
   BuffStatsText: {fileID: 1798897515766353693}

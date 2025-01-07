@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    /*
-    This is the way I want the 2 different clear conditions to work.
-    ELIMINATE:
-    The game will randomly generate a reasonable number of enemies to spawn ONCE,
-    when the number of enemies alive is 0, we clear
-
-    Survive:
-    The game will randomly generate a reasonable number and HALF it for the number of enemies to spawn. If an enemy is killed in that time, another one spawns to replace it
-    if we are surviving and time > 0 and enemiesalive is not equal to the target number ,spawn an enemy
-    when the time reaches 0, _kill_all_enemies_ and we clear (not sure about killing enemies or making the player do that...)
-    */
-
     public int enemiesAlive;
     public float timeToSurvive;
     public bool isStageCleared;
@@ -24,6 +12,11 @@ public class StageManager : MonoBehaviour
     private BuffManager buffManager;
     private EnemySpawner spawner;
     private UIManager uiManager;
+
+    public List<GameObject> stages;
+    public Rigidbody stageToSpawn; //TODO: For later
+    public GameObject stagePOI;
+
     //public float stageSize;
     public enum ClearCondition { Survive, Eliminate };
     public ClearCondition currentClrCon;
@@ -92,6 +85,12 @@ public class StageManager : MonoBehaviour
         buffManager.SpawnBuff();
         //TODO: Update Game manager stage count
     }
+
+    private void MoveStagePOI(Vector3 newPosition) //eventually I want to lerp this so its smooth
+    {
+        stagePOI.transform.position = newPosition;
+    }
+
     private void Awake()
     {
         isStageCleared = false;

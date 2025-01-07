@@ -4,25 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Crystals : MonoBehaviour
+public class Crystals : HoverableInteractables
 {
-    public GameObject CrystalUI;
-    public TextMeshProUGUI percentages;
     protected BuffManager buffManager;
-
+    public TextMeshProUGUI percentages; //uhhhhhhh :)
     private void Awake()
     {
         buffManager = FindAnyObjectByType<BuffManager>();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            CrystalUI.SetActive(true);
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            CrystalUI.SetActive(false);
     }
 }

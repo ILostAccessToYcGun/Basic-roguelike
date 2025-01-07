@@ -7,6 +7,7 @@ public class StatCrystal : Crystals
     private void Start()
     {
         UpdateStatChanceUI();
+        cam = FindAnyObjectByType<CameraMovement>();
     }
     public void UpdateStatChanceUI()
     {
