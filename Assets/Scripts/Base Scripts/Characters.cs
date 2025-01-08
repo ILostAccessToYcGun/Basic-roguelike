@@ -12,7 +12,7 @@ public class Characters : Units
     protected Vector3 mousePos;
     protected float attackTimer;
     protected int attackDirection = 1;
-    protected Quaternion currentAngle;
+    public Quaternion currentAngle;
 
     protected bool isEscapeReleased;
     protected bool notUsedBuffYet = true;

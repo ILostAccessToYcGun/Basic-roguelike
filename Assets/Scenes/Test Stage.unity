@@ -743,6 +743,10 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1123347648046441900, guid: 0fcbfa243deb0eb479bd0ce1393589d4, type: 3}
+      propertyPath: swingSpeed
+      value: 0.31
+      objectReference: {fileID: 0}
     - target: {fileID: 1622352917769193745, guid: 0fcbfa243deb0eb479bd0ce1393589d4, type: 3}
       propertyPath: m_Value
       value: 0.586
