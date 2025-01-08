@@ -20,6 +20,15 @@ public class Broadsword : Characters
     public Quaternion midAngle;
     public Quaternion endAngle;
     public float swingSpeed;
+    [SerializeField] float swingSpeedMultiplierZ;
+    [SerializeField] float swingSpeedMultiplierW;
+
+    public float distanceZ;
+    public float distanceW;
+    public float halfDistanceZ;
+    public float halfDistanceW;
+    public float fullDistanceZ;
+    public float fullDistanceW;
 
     //attackDelay is in seconds, when the player clicks to attack, the delay will go up a certain amount,
     //based on cooldown and will count down each frame
@@ -82,7 +91,6 @@ public class Broadsword : Characters
         jHeight = 2;
         WGHT = 5;
 
-
         InitializeStats();
 
         uiManager = FindAnyObjectByType<UIManager>();
@@ -121,12 +129,38 @@ public class Broadsword : Characters
                 {
                     //float distanceZ = Mathf.Abs(endAngle.z) - Mathf.Abs(currentAngle.z);
                     //float distanceW = Mathf.Abs(endAngle.w) - Mathf.Abs(currentAngle.w);
-                    //OKAY IM REALLY COSE TO BEING HAPPY HERE. THERE IS A BUG WHERE IT GOES ALL THE WAY FACING RIGHT, BUT ONLY HALF FACING LEFT
-                    float distanceZ = endAngle.z - currentAngle.z;
-                    float distanceW = endAngle.w - currentAngle.w;
-                    currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / swingSpeed)), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / swingSpeed)));
+
+                    //as the distance approaches half the initial distance, increase the speed,
+                    //as the distance moves away from half the initial different, decrease the speed
+
+                    
+                    //SPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED
+                    if (distanceZ <= halfDistanceZ)
+                    {
+                        swingSpeedMultiplierZ = distanceZ / halfDistanceZ;
+                    }
+                    else // distanceZ > halfDistanceZ
+                    {
+                        //swingSpeedMultiplierZ = -1;
+                        swingSpeedMultiplierZ = ((fullDistanceZ - distanceZ <= 0) ? 0.05f : fullDistanceZ - distanceZ) / halfDistanceZ;
+                    }
+
+                    if (distanceW <= halfDistanceW)
+                    {
+                        swingSpeedMultiplierW = distanceW / halfDistanceW;
+                    }
+                    else // distanceW > halfDistanceW
+                    {
+                        //swingSpeedMultiplierW = -1;
+                        swingSpeedMultiplierW = ((fullDistanceW - distanceW <= 0) ? 0.05f : fullDistanceW - distanceW) / halfDistanceW;
+                    }
+
+                    currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / swingSpeed * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / swingSpeed * (1 - swingSpeedMultiplierW))));
                     WPN.transform.rotation = currentAngle;
                     attackDelay -= Time.deltaTime;
+
+                    distanceZ = Mathf.Abs(endAngle.z - currentAngle.z);
+                    distanceW = Mathf.Abs(endAngle.w - currentAngle.w);
                 }
                 //SwordAttack();
             }
@@ -177,7 +211,16 @@ public class Broadsword : Characters
                 endAngle.eulerAngles = currentAngle.eulerAngles + new Vector3(0, 0, swordSwingRange * attackDirection); //end angle
                 currentAngle = startAngle;
 
-            }
+                distanceZ = Mathf.Abs(endAngle.z - currentAngle.z);
+                distanceW = Mathf.Abs(endAngle.w - currentAngle.w);
+
+                fullDistanceZ = distanceZ;
+                fullDistanceW = distanceW;
+
+                halfDistanceZ = distanceZ / 2;
+                halfDistanceW = distanceW / 2;
+
+}
         }
     }
     //private void OnCollisionStay2D(Collision2D collision)
