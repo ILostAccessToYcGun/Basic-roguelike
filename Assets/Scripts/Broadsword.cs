@@ -11,7 +11,9 @@ public class Broadsword : Characters
     private float swordSwingRange;
     private float swordSwingIncrement;
     public bool isSwingingSword;
+    public bool isSecondSwing;
     private int swordSwingFrame = 0;
+    private int singularFrameDelay = 1;
 
     private Sword swordObject;
 
@@ -38,40 +40,7 @@ public class Broadsword : Characters
     /// </summary>
     public void SwordAttack()
     {
-        //if (swordSwingFrame >= (500 - f_CD) * 2)
-        //{
-        //    isSwingingSword = false; //exit condition
-        //    swordSwingFrame = 0;
-        //    mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //    PointWeapon(WPN, mousePos);
-        //    currentAngle.eulerAngles -= new Vector3(0, 0, swordSwingRange * attackDirection);
-        //    //attackTimer = (3 - (f_CD/100) > 0) ? 3 - (f_CD / 100) : 0.01f; //getting rid of the in between attack cd because it feels really bad on sword, this will need to exist on projectile weapons
-        //    attackTimer = 0.01f;
-        //}
-        //else
-        //{
-        //    currentAngle.eulerAngles += new Vector3(0, 0, (swordSwingRange / (500 - f_CD)) * attackDirection);
-        //    swordSwingFrame++;
-        //}
-        //WPN.transform.rotation = currentAngle;
-
-        //CD/Attack speed rework
-        if (swordSwingFrame >= (500 - f_CD) * 2)
-        {
-            isSwingingSword = false; //exit condition
-            swordSwingFrame = 0;
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            PointWeapon(WPN, mousePos);
-            currentAngle.eulerAngles -= new Vector3(0, 0, swordSwingRange * attackDirection);
-            //attackTimer = (3 - (f_CD/100) > 0) ? 3 - (f_CD / 100) : 0.01f; //getting rid of the in between attack cd because it feels really bad on sword, this will need to exist on projectile weapons
-            attackTimer = 0.01f;
-        }
-        else
-        {
-            currentAngle.eulerAngles += new Vector3(0, 0, (swordSwingRange / (500 - f_CD)) * attackDirection);
-            swordSwingFrame++;
-        }
-        WPN.transform.rotation = currentAngle;
+        
     }
 
     /// <summary>
@@ -124,44 +93,23 @@ public class Broadsword : Characters
                 {
                     WPN.transform.rotation = midAngle;
                     isSwingingSword = false;
+                    singularFrameDelay = 1;
                 }
                 else
                 {
-                    //float distanceZ = Mathf.Abs(endAngle.z) - Mathf.Abs(currentAngle.z);
-                    //float distanceW = Mathf.Abs(endAngle.w) - Mathf.Abs(currentAngle.w);
-
-                    //as the distance approaches half the initial distance, increase the speed,
-                    //as the distance moves away from half the initial different, decrease the speed
-
-                    
                     //SPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED
-                    if (distanceZ <= halfDistanceZ)
-                    {
+                    //how the frogs did that kinda work
+                    if (distanceZ <= (halfDistanceZ - 0.05f)/4)
                         swingSpeedMultiplierZ = distanceZ / halfDistanceZ;
-                    }
-                    else // distanceZ > halfDistanceZ
-                    {
-                        //this speed should be fairly fast here
+                    else
+                        swingSpeedMultiplierZ = (halfDistanceZ - 0.05f) / halfDistanceZ;
 
-                        //swingSpeedMultiplierZ = distanceZ / halfDistanceZ;
-                        //swingSpeedMultiplierZ = 0;
-                        //swingSpeedMultiplierZ = ((fullDistanceZ - distanceZ <= 0) ? 0.05f : fullDistanceZ - distanceZ) / halfDistanceZ;
-                    }
-
-                    if (distanceW <= halfDistanceW)
-                    {
+                    if (distanceW <= (halfDistanceW - 0.05f)/4)
                         swingSpeedMultiplierW = distanceW / halfDistanceW;
-                    }
-                    else // distanceW > halfDistanceW
-                    {
-                        //this speed should be fairly fast here
+                    else
+                        swingSpeedMultiplierW = (halfDistanceW - 0.05f) / halfDistanceW;
 
-                        //swingSpeedMultiplierW = distanceW / halfDistanceW;
-                        //swingSpeedMultiplierW = 0;
-                        //swingSpeedMultiplierW = ((fullDistanceW - distanceW <= 0) ? 0.05f : fullDistanceW - distanceW) / halfDistanceW;
-                    }
-
-                    currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / swingSpeed * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / swingSpeed * (1 - swingSpeedMultiplierW))));
+                    currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / (swingSpeed * (1 + f_CD)) * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / (swingSpeed * (1 + f_CD)) * (1 - swingSpeedMultiplierW))));
                     WPN.transform.rotation = currentAngle;
                     attackDelay -= Time.deltaTime;
 
@@ -171,62 +119,103 @@ public class Broadsword : Characters
                 //SwordAttack();
             }
             else
-                PointWeapon(WPN, mousePos);
-
-            ////Attacking TODO: Optimize this later with virtual methods and runtime polymorphism
-            //if (attackTimer > 0)
-            //    attackTimer -= Time.deltaTime;
-            //else
-            //{
-            //    if (Input.GetAxisRaw("Attack") == 1 && !isSwingingSword)
-            //    {
-            //        isSwingingSword = true;
-            //        swordSwingFrame = 0;
-
-            //        if (mousePos.x > transform.position.x)
-            //            attackDirection = -1;
-            //        else
-            //            attackDirection = 1;
-
-            //        currentAngle.eulerAngles = WPN.transform.rotation.eulerAngles;
-            //        currentAngle.eulerAngles -= new Vector3(0, 0, swordSwingRange * attackDirection);
-            //    }
-            //}
+            {
+                if (singularFrameDelay > 0)
+                {
+                    PointWeapon(WPN, (Vector2)mousePos);
+                }
+                else
+                {
+                    GetPointAngle(WPN, (Vector2)mousePos);
+                }
+            }
 
             //CD/Attackspeed rework
             //when the player clicks to attack, the delay will go up a certain amount,
             //based on cooldown and will count down each frame
 
-            if (Input.GetAxisRaw("Attack") == 1 && !isSwingingSword) //if we click and we arent already swinging
+            if (Input.GetAxisRaw("Attack") == 1) //if we click and we arent already swinging
             {
-                attackDelay = 2f / (f_CD + 100/100f); //i think thats a not bad algorithm,
-                //0.5 attacks persecond by default. this can and probably will change
-                isSwingingSword = true;
+                if (!isSwingingSword && singularFrameDelay <= 0)
+                {
+                    attackDelay = 2f / (f_CD + 100 / 100f); //i think thats a not bad algorithm, 0.5 attacks persecond by default. this can and probably will change
+                    //^^ this should be the only algorithm needed for ranged weapons, for melee weapons they need their attack animation sped up aswell
 
-                //get direction
-                if (mousePos.x > transform.position.x)
-                    attackDirection = -1;
+                    isSwingingSword = true;
+
+                    //get direction
+                    if (mousePos.x > transform.position.x)
+                        attackDirection = -1;
+                    else
+                        attackDirection = 1;
+
+                    currentAngle.eulerAngles = pointAngle.eulerAngles;
+
+                    if (isSecondSwing)
+                    {
+                        attackDirection *= -1;
+                        isSecondSwing = false;
+                    }
+                    else
+                        isSecondSwing = true;
+
+
+                    //now we need to wind up the swing, offset the sword angle by the swing range
+                    startAngle.eulerAngles = currentAngle.eulerAngles - new Vector3(0, 0, swordSwingRange * attackDirection); //start angle
+                    midAngle = currentAngle; //mid angle
+                    endAngle.eulerAngles = currentAngle.eulerAngles + new Vector3(0, 0, swordSwingRange * attackDirection); //end angle
+                    currentAngle = startAngle;
+
+                    distanceZ = Mathf.Abs(endAngle.z - currentAngle.z);
+                    distanceW = Mathf.Abs(endAngle.w - currentAngle.w);
+
+                    fullDistanceZ = distanceZ;
+                    fullDistanceW = distanceW;
+
+                    halfDistanceZ = distanceZ / 2;
+                    halfDistanceW = distanceW / 2;
+
+                    //if (!isSecondSwing)
+                    //{
+                        
+                        
+                    //}
+                    //else
+                    //{
+                    //    //now we need to wind up the swing, offset the sword angle by the swing range
+                    //    startAngle.eulerAngles = currentAngle.eulerAngles - new Vector3(0, 0, swordSwingRange * attackDirection * -1); //start angle
+                    //    midAngle = currentAngle; //mid angle
+                    //    endAngle.eulerAngles = currentAngle.eulerAngles + new Vector3(0, 0, swordSwingRange * attackDirection * -1); //end angle
+                    //    currentAngle = startAngle;
+
+                    //    distanceZ = Mathf.Abs(endAngle.z - currentAngle.z);
+                    //    distanceW = Mathf.Abs(endAngle.w - currentAngle.w);
+
+                    //    fullDistanceZ = distanceZ;
+                    //    fullDistanceW = distanceW;
+
+                    //    halfDistanceZ = distanceZ / 2;
+                    //    halfDistanceW = distanceW / 2;
+                        
+                    //}
+                }
                 else
-                    attackDirection = 1;
+                {
+                    if (singularFrameDelay > 0)
+                        singularFrameDelay--;
+                }
+                
+                
+            }
+            else
+            {
+                //stop continuous swing
+                if (isSecondSwing)
+                    isSecondSwing = false;
 
+                
+            }
 
-                //now we need to wind up the swing, offset the sword angle by the swing range
-                currentAngle.eulerAngles = WPN.transform.rotation.eulerAngles;
-                startAngle.eulerAngles = currentAngle.eulerAngles - new Vector3(0, 0, swordSwingRange * attackDirection); //start angle
-                midAngle = currentAngle; //mid angle
-                endAngle.eulerAngles = currentAngle.eulerAngles + new Vector3(0, 0, swordSwingRange * attackDirection); //end angle
-                currentAngle = startAngle;
-
-                distanceZ = Mathf.Abs(endAngle.z - currentAngle.z);
-                distanceW = Mathf.Abs(endAngle.w - currentAngle.w);
-
-                fullDistanceZ = distanceZ;
-                fullDistanceW = distanceW;
-
-                halfDistanceZ = distanceZ / 2;
-                halfDistanceW = distanceW / 2;
-
-}
         }
     }
     //private void OnCollisionStay2D(Collision2D collision)

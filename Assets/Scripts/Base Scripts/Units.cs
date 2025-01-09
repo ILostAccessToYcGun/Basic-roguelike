@@ -193,30 +193,47 @@ public class Units : MonoBehaviour
     //TODO: Optimize these calculations theres gonna be a lot of these
     protected void PointWeapon(GameObject _weapon, Vector2 target)
     {
-        //if we're actually holding a weapon
         if (_weapon != null)
         {
-            //gets the onscreen location of the mouse
-            // convert mouse position into world coordinates
-            Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
             // get direction you want to point at
-            Vector2 direction = (mouseScreenPosition - (Vector2)transform.position).normalized;
+            Vector2 direction = (target - (Vector2)transform.position).normalized;
 
             float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
 
-            if (mouseScreenPosition.x < transform.position.x)
+            if (target.x < transform.position.x)
                 currAngle = 180 - currAngle;
 
-            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle);
+            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle) - 90;
 
-            pointAngle.eulerAngles += new Vector3(0, 0, dif - 90);
+            pointAngle.eulerAngles += new Vector3(0, 0, dif);
             //point the weapon towards the mouse
             _weapon.transform.rotation = pointAngle;
-
-            //evetually i want a thing so that the sword point weapon isnt dead on, cuz thats called a spear
         }
+        else
+            return;
     }
+
+    protected void GetPointAngle(GameObject _weapon, Vector2 target)
+    {
+        if (_weapon != null)
+        {
+            // get direction you want to point at
+            Vector2 direction = (target - (Vector2)transform.position).normalized;
+
+            float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
+
+            if (target.x < transform.position.x)
+                currAngle = 180 - currAngle;
+
+            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle) - 90;
+
+            pointAngle.eulerAngles += new Vector3(0, 0, dif);
+        }
+        else
+            return;
+    }
+
+
 
     public void TakeDamage(int damageSource)
     {

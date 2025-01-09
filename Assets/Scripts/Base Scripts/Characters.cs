@@ -9,7 +9,7 @@ public class Characters : Units
     public ShopKeeper shopKeeper;
 
 
-    protected Vector3 mousePos;
+    public Vector3 mousePos;
     protected float attackTimer;
     protected int attackDirection = 1;
     public Quaternion currentAngle;
