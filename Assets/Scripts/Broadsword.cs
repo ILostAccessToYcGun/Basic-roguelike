@@ -141,8 +141,11 @@ public class Broadsword : Characters
                     }
                     else // distanceZ > halfDistanceZ
                     {
-                        //swingSpeedMultiplierZ = -1;
-                        swingSpeedMultiplierZ = ((fullDistanceZ - distanceZ <= 0) ? 0.05f : fullDistanceZ - distanceZ) / halfDistanceZ;
+                        //this speed should be fairly fast here
+
+                        //swingSpeedMultiplierZ = distanceZ / halfDistanceZ;
+                        //swingSpeedMultiplierZ = 0;
+                        //swingSpeedMultiplierZ = ((fullDistanceZ - distanceZ <= 0) ? 0.05f : fullDistanceZ - distanceZ) / halfDistanceZ;
                     }
 
                     if (distanceW <= halfDistanceW)
@@ -151,8 +154,11 @@ public class Broadsword : Characters
                     }
                     else // distanceW > halfDistanceW
                     {
-                        //swingSpeedMultiplierW = -1;
-                        swingSpeedMultiplierW = ((fullDistanceW - distanceW <= 0) ? 0.05f : fullDistanceW - distanceW) / halfDistanceW;
+                        //this speed should be fairly fast here
+
+                        //swingSpeedMultiplierW = distanceW / halfDistanceW;
+                        //swingSpeedMultiplierW = 0;
+                        //swingSpeedMultiplierW = ((fullDistanceW - distanceW <= 0) ? 0.05f : fullDistanceW - distanceW) / halfDistanceW;
                     }
 
                     currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / swingSpeed * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / swingSpeed * (1 - swingSpeedMultiplierW))));
