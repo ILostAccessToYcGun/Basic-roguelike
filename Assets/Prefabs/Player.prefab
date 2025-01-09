@@ -121,11 +121,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -0.55, y: -0.29}
-  - {x: -0.05, y: 0.58}
-  - {x: 0.05, y: 0.58}
-  - {x: 0.55, y: -0.29}
-  - {x: -0.55, y: -0.29}
+  - {x: 0, y: -0.29}
+  - {x: 0, y: 0.58}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -829,18 +826,17 @@ MonoBehaviour:
   f_WGHT: 0
   ITEM: 1
   WPN: {fileID: 8060923830479539427}
-  pointAngle: {x: 0, y: 0, z: 0, w: 0}
-  gravity: 0
-  grounded: 0
-  hasNotJumped: 0
-  floored: 0
-  walled: 0
-  isWallJumping: 0
-  wallJumpDuration: 0
-  wallJumpDir: 0
   isAttacked: 0
   hpBar: {fileID: 0}
+  uiManager: {fileID: 0}
+  currentBuff: {fileID: 0}
+  shopKeeper: {fileID: 0}
+  mousePos: {x: 0, y: 0, z: 0}
   isSwingingSword: 0
+  attackDelay: 0
+  swingSpeed: 0
+  swingSpeedMultiplierZ: 0
+  swingSpeedMultiplierW: 0
 --- !u!61 &6920849476412664975
 BoxCollider2D:
   m_ObjectHideFlags: 0

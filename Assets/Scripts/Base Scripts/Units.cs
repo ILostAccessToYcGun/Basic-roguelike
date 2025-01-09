@@ -40,19 +40,18 @@ public class Units : MonoBehaviour
     public enum Weapons { Sword, Gun, Bomb, None}
     public Weapons ITEM;
     public GameObject WPN; //ref to the weapon the guy is holding
-    public Quaternion pointAngle;
+    protected Quaternion pointAngle;
 
-    //TODO: change the access modifiers
-    public float gravity;
-    public bool grounded = false;
-    public bool hasNotJumped;
-    public bool floored = false;
+    protected float gravity;
+    protected bool grounded = false;
+    protected bool hasNotJumped;
+    protected bool floored = false;
 
-    public bool walled = false;
-    public bool isWallJumping;
-    public float wallJumpDuration;
-    public enum wallJumpDirection { Left, Right }
-    public wallJumpDirection wallJumpDir = wallJumpDirection.Left;
+    protected bool walled = false;
+    protected bool isWallJumping;
+    protected float wallJumpDuration;
+    protected enum wallJumpDirection { Left, Right }
+    protected wallJumpDirection wallJumpDir = wallJumpDirection.Left;
 
     public bool isAttacked;
     protected Rigidbody2D rb;

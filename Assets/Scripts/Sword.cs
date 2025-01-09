@@ -12,6 +12,9 @@ public class Sword : MonoBehaviour
         playerScript = GetComponentInParent<Broadsword>();
     }
 
+
+    //Edit the script to stop occasionaly double damage
+    //probably add the tagged enemies into a list and change the list after the attack is complete
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (playerScript.isSwingingSword)

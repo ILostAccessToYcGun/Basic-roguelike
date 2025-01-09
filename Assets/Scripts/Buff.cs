@@ -135,40 +135,44 @@ public class Buff : HoverableInteractables
         {
             case BuffManager.UnitStats.MaxHP:
                 AssignBuffValue(stat, new List<int> { 1, 6, 6, 11, 11, 21, 21, 31, 31, 51 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "MaxHP +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.ATK:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 4, 7, 7, 11 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "ATK +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.SPD:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 5, 8, 8, 11 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "SPD +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.DEF:
                 AssignBuffValue(stat, new List<int> { 1, 3, 2, 4, 3, 5, 4, 7, 7, 11 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "DEF +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.CD:
-                //AssignBuffValue(stat, new List<int> {  });
-                switch (rarity)
-                {
-                    case BuffManager.Grade.Common:
-                    case BuffManager.Grade.Uncommon:
-                    case BuffManager.Grade.Rare:
-                    case BuffManager.Grade.Epic:
-                    case BuffManager.Grade.Legendary:
-                        stat.buffValue = 1; //TODO: this needs to change once we rework CD
-                        break;
-                }
+                AssignBuffValue(stat, new List<int> { 1, 2, 1, 3, 2, 3, 2, 4, 3, 5 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "CD +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.JUMP:
                 AssignBuffValue(stat, new List<int> { 0, 1, 1, 2, 1, 3, 2, 3, 2, 4 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "Jumps +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.jHGHT:
                 AssignBuffValue(stat, new List<int> { 0, 2, 0, 2, 1, 3, 1, 4, 2, 5 });
+                if (stat.buffValue == 0)
+                    break;
                 BuffStatsText.text += "Jump Height +" + stat.buffValue;
                 break;
         }
