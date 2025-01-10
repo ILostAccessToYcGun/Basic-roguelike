@@ -17,10 +17,10 @@ public class Units : MonoBehaviour
     protected int DEF; //I havent figured out the damage calculation yet
 
     //----------Special Stats----------//
-    protected int CD; //(ms)?
+    protected int ATKSPD; 
     protected int currentJUMP;
     protected int JUMP;
-    protected int jHeight; //jump height
+    protected int REG; //health regen
     protected int WGHT;
 
     //______________________________FINAL STATS______________________________//
@@ -31,9 +31,9 @@ public class Units : MonoBehaviour
     public int f_DEF;
 
     //----------Special Stats----------//
-    public int f_CD;
+    public int f_ATKSPD;
     public int f_JUMP;
-    public int f_jHeight; //honestly not really happy with this stat
+    public int f_REG; 
     public int f_WGHT;
 
     //other stats
@@ -56,6 +56,9 @@ public class Units : MonoBehaviour
     public bool isAttacked;
     protected Rigidbody2D rb;
 
+    protected float regenIncrement;
+    protected float regenTimer;
+
     //UI
     public Slider hpBar;
 
@@ -72,9 +75,9 @@ public class Units : MonoBehaviour
 
         //special stats
         currentJUMP = JUMP;
-        f_CD = CD;
+        f_ATKSPD = ATKSPD;
         f_JUMP = JUMP;
-        f_jHeight = jHeight;
+        f_REG = REG;
         f_WGHT = WGHT;
 
         ITEM = Weapons.None;
@@ -107,10 +110,7 @@ public class Units : MonoBehaviour
             grounded = false;
             floored = false;
             hasNotJumped = false;
-            gravity = -7.5f * f_jHeight; //jump height, can be changed? maybe should be a variable
-
-
-
+            gravity = -7.5f * (2 * (0.15f * f_SPD));
         }
     }
 
@@ -147,7 +147,7 @@ public class Units : MonoBehaviour
         //instead of running an else statement here, I will make it on the collision where the gravity gets reset i think that will cut down on performace 
     }
 
-    protected void Recover()
+    protected void JumpRecover()
     {
         gravity = 0;
         grounded = true;
@@ -157,7 +157,7 @@ public class Units : MonoBehaviour
         currentJUMP = f_JUMP;
     }
 
-    protected void WallRecover(float wallX)
+    protected void WallJumpRecover(float wallX)
     {
         walled = true;
 
@@ -241,6 +241,8 @@ public class Units : MonoBehaviour
         isAttacked = true;
     }
 
+
+    //USE THIS FOR HEALTH REGEN ------------------------------------------------------------------------
     public void Heal(int healSource)
     {
         if (healSource > f_MaxHP - CurrentHP)
@@ -248,6 +250,29 @@ public class Units : MonoBehaviour
         else
             CurrentHP += healSource;
         UpdateHPBar();
+    }
+
+    //every point of regen regenerates 0.2f health per second
+    public void RegenHealth()
+    {
+        if (regenTimer <= 0)
+        {
+
+            //if (regenIncrement >= 1)
+            //{
+            //    int flatRegen = Mathf.FloorToInt(regenIncrement);
+            //    regenIncrement -= flatRegen;
+            //    Heal(flatRegen);
+            //}
+            //maybe later if the regen is too high, we change increase the base heal from 1 to 2, etc
+            Heal(1);
+            if (f_REG != 0)
+                regenTimer = 5f / f_REG;
+            else
+                regenTimer = 5f;
+        }
+        else
+            regenTimer-= Time.deltaTime;
     }
 
     public virtual void DeathCheck() //TODO: currently with the virtual overrides (big pog btw) i basically cant use any of the og death check, i wanna fix that somehow
@@ -273,15 +298,14 @@ public class Units : MonoBehaviour
             if (collision.transform.position.y < transform.position.y - (0.5f * transform.localScale.y))
             {
                 //if (collision.transform.position.x + (0.5f * collision.transform.localScale.x) > transform.position.x - (0.5f * f_SIZE) && collision.transform.position.x - (0.5f * collision.transform.localScale.x) < transform.position.x + (0.5f * f_SIZE))
-                if (!(collision.transform.position.x + (0.5f * collision.transform.localScale.x) < transform.position.x - (0.4f * transform.localScale.y) || collision.transform.position.x - (0.5f * collision.transform.localScale.x) > transform.position.x + (0.4f * transform.localScale.y))) //TODO: make this not a ! statement
+                if (!(collision.transform.position.x + (0.5f * collision.transform.localScale.x) < transform.position.x - (0.4f * transform.localScale.x) || collision.transform.position.x - (0.5f * collision.transform.localScale.x) > transform.position.x + (0.4f * transform.localScale.y))) //TODO: make this not a ! statement
                 {
                     if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                        Recover();
+                        JumpRecover();
                     else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                        Recover();
+                        JumpRecover();
                     else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-                        Recover();
-
+                        JumpRecover();
                     //Debug.Log("AHHHHHHHHHHHHHHH Ground Recover");
                 }
             }
@@ -291,12 +315,11 @@ public class Units : MonoBehaviour
             if (collision.transform.position.y + (0.5f * collision.transform.localScale.y) < transform.position.y - (0.5f * transform.localScale.y))
             {
                 if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                    Recover();
+                    JumpRecover();
                 else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    Recover();
+                    JumpRecover();
                 else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-                    Recover();
-
+                    JumpRecover();
                 //Debug.Log("Basic Ground Recover");
             }
         }
@@ -312,18 +335,12 @@ public class Units : MonoBehaviour
                 {
                     if (!isWallJumping)
                     {
-                        WallRecover(collision.transform.position.x);
+                        WallJumpRecover(collision.transform.position.x);
                         //Debug.Log("Wall Recover");
                     }
                 }
             }
         }
-
-
-
-
-
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -336,7 +353,5 @@ public class Units : MonoBehaviour
             walled = false;
             floored = false;
         }
-            
-
     }
 }

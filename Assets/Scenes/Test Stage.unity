@@ -1338,9 +1338,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 286567851546167217, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 545498681942924686, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_text
+      value: 'REG
+
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 622699904682448071, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_text
+      value: 'ATKSPD
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 1787019285463960733, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
       propertyPath: m_Name
       value: Shop
+      objectReference: {fileID: 0}
+    - target: {fileID: 2148510691175958603, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_Name
+      value: REGSquare
+      objectReference: {fileID: 0}
+    - target: {fileID: 5825891159794555709, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6157805362094786678, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1381,6 +1406,10 @@ PrefabInstance:
     - target: {fileID: 6157805362094786678, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9012307152987449127, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+      propertyPath: m_Name
+      value: ATKSPDSquare
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -38,7 +38,7 @@ public class Broadsword : Characters
     {
         if (!isSwingingSword && singularFrameDelay <= 0)
         {
-            attackDelay = 2f / (f_CD + 100 / 100f); 
+            attackDelay = 2f / (f_ATKSPD + 100 / 100f); 
             //i think thats a not bad algorithm, 0.5 attacks persecond by default. this can and probably will change
             //^^ this should be the only algorithm needed for ranged weapons, for melee weapons they need their attack animation sped up aswell
             //TODO: decide if you want f_CD to scale the speed slower, right now, 20CD is pretty fast
@@ -87,6 +87,8 @@ public class Broadsword : Characters
             WPN.transform.rotation = midAngle;
             isSwingingSword = false;
             singularFrameDelay = 1;
+
+            swordObject.ResetTags();
         }
         else
         {
@@ -100,7 +102,7 @@ public class Broadsword : Characters
             else
                 swingSpeedMultiplierW = (halfDistanceW - 0.05f) / halfDistanceW;
 
-            currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / (swingSpeed * (1 + f_CD)) * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / (swingSpeed * (1 + f_CD)) * (1 - swingSpeedMultiplierW))));
+            currentAngle = new Quaternion(0, 0, Mathf.Lerp(currentAngle.z, endAngle.z, Time.deltaTime / (distanceZ / (swingSpeed * (1 + f_ATKSPD)) * (1 - swingSpeedMultiplierZ))), Mathf.Lerp(currentAngle.w, endAngle.w, Time.deltaTime / (distanceW / (swingSpeed * (1 + f_ATKSPD)) * (1 - swingSpeedMultiplierW))));
             WPN.transform.rotation = currentAngle;
             attackDelay -= Time.deltaTime;
 
@@ -118,9 +120,9 @@ public class Broadsword : Characters
         DEF = 10;
 
         //special stats
-        CD = 0;
+        ATKSPD = 0;
         JUMP = 1;
-        jHeight = 2;
+        REG = 5;
         WGHT = 5;
 
         InitializeStats();
@@ -146,6 +148,7 @@ public class Broadsword : Characters
             DeathCheck();
             Movement();
             OtherControls();
+            RegenHealth();
 
             //if we are swinging, stop pointing and swing
             if (isSwingingSword)

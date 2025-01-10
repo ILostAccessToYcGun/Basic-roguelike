@@ -15,7 +15,7 @@ public class BuffManager : MonoBehaviour
     
     
     public enum Grade { Common, Uncommon, Rare, Epic, Legendary }
-    public enum UnitStats { MaxHP, ATK, SPD, DEF, CD, JUMP, jHGHT }
+    public enum UnitStats { MaxHP, ATK, SPD, DEF, ATKSPD, JUMP, REG }
     //public enum GameStats { EnemyCount, StageSize }//?
 
     //this is for later when I let the player manipulate stat odds
@@ -32,9 +32,9 @@ public class BuffManager : MonoBehaviour
     public int ATKChance;
     public int SPDChance;
     public int DEFChance;
-    public int CDChance;
+    public int ATKSPDChance;
     public int JUMPChance;
-    public int jHGHTChance;
+    public int REGChance;
     public int StatTotalChance;
 
     private void Awake()
@@ -44,7 +44,7 @@ public class BuffManager : MonoBehaviour
 
     public void PickBuffStat(BuffStat bs)
     {
-        int chance = Random.Range(0, MaxHPChance + ATKChance + SPDChance + DEFChance + CDChance + JUMPChance + jHGHTChance);
+        int chance = Random.Range(0, MaxHPChance + ATKChance + SPDChance + DEFChance + ATKSPDChance + JUMPChance + REGChance);
 
         if (chance < MaxHPChance)
             bs.unitStat = UnitStats.MaxHP;
@@ -54,12 +54,12 @@ public class BuffManager : MonoBehaviour
             bs.unitStat = UnitStats.SPD;
         else if (chance < DEFChance + MaxHPChance + ATKChance + SPDChance)
             bs.unitStat = UnitStats.DEF;
-        else if (chance < CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
-            bs.unitStat = UnitStats.CD;
-        else if (chance < JUMPChance + CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
+        else if (chance < ATKSPDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
+            bs.unitStat = UnitStats.ATKSPD;
+        else if (chance < JUMPChance + ATKSPDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
             bs.unitStat = UnitStats.JUMP;
-        else if (chance < jHGHTChance + JUMPChance + CDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
-            bs.unitStat = UnitStats.jHGHT;
+        else if (chance < REGChance + JUMPChance + ATKSPDChance + MaxHPChance + ATKChance + SPDChance + DEFChance)
+            bs.unitStat = UnitStats.REG;
     }
 
     private void ResetProbabilities()
@@ -75,9 +75,9 @@ public class BuffManager : MonoBehaviour
         ATKChance = 10;
         SPDChance = 10;
         DEFChance = 10;
-        CDChance = 10;
+        ATKSPDChance = 10;
         JUMPChance = 10;
-        jHGHTChance = 10;
+        REGChance = 10;
         TotalStatChance();
     }
 
@@ -143,17 +143,17 @@ public class BuffManager : MonoBehaviour
                 if (DEFChance + chanceModifier >= 0)
                     DEFChance += chanceModifier;
                 break;
-            case UnitStats.CD:
-                if (CDChance + chanceModifier >= 0)
-                    CDChance += chanceModifier;
+            case UnitStats.ATKSPD:
+                if (ATKSPDChance + chanceModifier >= 0)
+                    ATKSPDChance += chanceModifier;
                 break;
             case UnitStats.JUMP:
                 if (JUMPChance + chanceModifier >= 0)
                     JUMPChance += chanceModifier;
                 break;
-            case UnitStats.jHGHT:
-                if (jHGHTChance + chanceModifier >= 0)
-                    jHGHTChance += chanceModifier;
+            case UnitStats.REG:
+                if (REGChance + chanceModifier >= 0)
+                    REGChance += chanceModifier;
                 break;
         }
         TotalStatChance();
@@ -161,11 +161,9 @@ public class BuffManager : MonoBehaviour
 
     public void TotalStatChance()
     {
-        StatTotalChance = MaxHPChance + ATKChance + SPDChance + DEFChance + CDChance + JUMPChance + jHGHTChance;
+        StatTotalChance = MaxHPChance + ATKChance + SPDChance + DEFChance + ATKSPDChance + JUMPChance + REGChance;
     }
 
-
-    //TESTING
 
     private void Update()
     {

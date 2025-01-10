@@ -7,9 +7,22 @@ public class Sword : MonoBehaviour
     public NormalEnemy enemyScript;
     private Broadsword playerScript;
 
+    public List<Enemies> tagList;
+    public bool isTagInList;
+
     private void Awake()
     {
         playerScript = GetComponentInParent<Broadsword>();
+    }
+
+    public void ResetTags()
+    {
+        foreach (Enemies tagged in tagList)
+        {
+            tagged.isAttacked = false;
+        }
+
+        tagList.Clear();
     }
 
 
@@ -21,9 +34,24 @@ public class Sword : MonoBehaviour
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
+                
                 enemyScript = collision.gameObject.GetComponent<NormalEnemy>();
-                if (enemyScript.isAttacked == false)
+
+                isTagInList = false;
+                foreach (Enemies tagged in tagList)
+                {
+                    if (tagged == enemyScript)
+                        isTagInList = true;
+                }
+
+                if (enemyScript.isAttacked == false && isTagInList == false)
+                {
                     enemyScript.TakeDamage(playerScript.f_ATK);
+                    tagList.Add(enemyScript);
+                }
+                    
+
+
             }
         }
     }

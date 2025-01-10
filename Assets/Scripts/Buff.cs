@@ -157,11 +157,11 @@ public class Buff : HoverableInteractables
                     break;
                 BuffStatsText.text += "DEF +" + stat.buffValue;
                 break;
-            case BuffManager.UnitStats.CD:
+            case BuffManager.UnitStats.ATKSPD:
                 AssignBuffValue(stat, new List<int> { 1, 2, 1, 3, 2, 3, 2, 4, 3, 5 });
                 if (stat.buffValue == 0)
                     break;
-                BuffStatsText.text += "CD +" + stat.buffValue;
+                BuffStatsText.text += "ATKSPD +" + stat.buffValue;
                 break;
             case BuffManager.UnitStats.JUMP:
                 AssignBuffValue(stat, new List<int> { 0, 1, 1, 2, 1, 3, 2, 3, 2, 4 });
@@ -169,11 +169,11 @@ public class Buff : HoverableInteractables
                     break;
                 BuffStatsText.text += "Jumps +" + stat.buffValue;
                 break;
-            case BuffManager.UnitStats.jHGHT:
+            case BuffManager.UnitStats.REG:
                 AssignBuffValue(stat, new List<int> { 0, 2, 0, 2, 1, 3, 1, 4, 2, 5 });
                 if (stat.buffValue == 0)
                     break;
-                BuffStatsText.text += "Jump Height +" + stat.buffValue;
+                BuffStatsText.text += "Health Regen +" + stat.buffValue;
                 break;
         }
     }
@@ -204,12 +204,12 @@ public class Buff : HoverableInteractables
                 player.f_SPD += buffStats[i].buffValue;
             else if (buffStats[i].unitStat == BuffManager.UnitStats.DEF)
                 player.f_DEF += buffStats[i].buffValue;
-            else if (buffStats[i].unitStat == BuffManager.UnitStats.CD)
-                player.f_CD += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.ATKSPD)
+                player.f_ATKSPD += buffStats[i].buffValue;
             else if (buffStats[i].unitStat == BuffManager.UnitStats.JUMP)
                 player.f_JUMP += buffStats[i].buffValue;
-            else if (buffStats[i].unitStat == BuffManager.UnitStats.jHGHT)
-                player.f_jHeight += buffStats[i].buffValue;
+            else if (buffStats[i].unitStat == BuffManager.UnitStats.REG)
+                player.f_REG += buffStats[i].buffValue;
         }
 
         //foreach (BuffManager.BuffStat stat in buffStats)

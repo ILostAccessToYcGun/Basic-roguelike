@@ -252,9 +252,9 @@ public class UIManager : MonoBehaviour
             "<br>ATK: " + player.f_ATK + 
             "<br>SPD: " + player.f_SPD + 
             "<br>DEF: " + player.f_DEF + 
-            "<br>CD: " + player.f_CD + 
+            "<br>CD: " + player.f_ATKSPD + 
             "<br>Jumps: " + player.f_JUMP + 
-            "<br>Jump Height: " + player.f_jHeight;
+            "<br>Jump Height: " + player.f_REG;
     }
 
     #endregion

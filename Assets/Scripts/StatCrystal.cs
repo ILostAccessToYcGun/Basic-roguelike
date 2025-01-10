@@ -15,9 +15,9 @@ public class StatCrystal : Crystals
             Mathf.Floor((float)buffManager.ATKChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
             Mathf.Floor((float)buffManager.SPDChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
             Mathf.Floor((float)buffManager.DEFChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.CDChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
+            Mathf.Floor((float)buffManager.ATKSPDChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
             Mathf.Floor((float)buffManager.JUMPChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.jHGHTChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%";
+            Mathf.Floor((float)buffManager.REGChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%";
     }
 
     public void HPPlus()
@@ -63,14 +63,14 @@ public class StatCrystal : Crystals
         UpdateStatChanceUI();
     }
 
-    public void CDPlus()
+    public void ATKSPDPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.CD, 1);
+        buffManager.ChangeStatChance(BuffManager.UnitStats.ATKSPD, 1);
         UpdateStatChanceUI();
     }
-    public void CDMinus()
+    public void ATKSPDMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.CD, -1);
+        buffManager.ChangeStatChance(BuffManager.UnitStats.ATKSPD, -1);
         UpdateStatChanceUI();
     }
 
@@ -85,14 +85,14 @@ public class StatCrystal : Crystals
         UpdateStatChanceUI();
     }
 
-    public void jHeightPlus()
+    public void REGPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.jHGHT, 1);
+        buffManager.ChangeStatChance(BuffManager.UnitStats.REG, 1);
         UpdateStatChanceUI();
     }
-    public void jHeightMinus()
+    public void REGMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.jHGHT, -1);
+        buffManager.ChangeStatChance(BuffManager.UnitStats.REG, -1);
         UpdateStatChanceUI();
     }
 }

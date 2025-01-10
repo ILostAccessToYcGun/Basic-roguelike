@@ -19,7 +19,6 @@ public class Characters : Units
 
     protected void Movement()
     {
-        DeathCheck();
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (!isWallJumping)
         {
@@ -108,6 +107,9 @@ public class Characters : Units
             Destroy(gameObject);
         }
     }
+
+    
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

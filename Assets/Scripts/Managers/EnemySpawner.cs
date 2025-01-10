@@ -22,9 +22,9 @@ public class EnemySpawner : Enemies
         f_SPD = 0;
         f_DEF = 0;
 
-        f_CD = 0;
+        f_ATKSPD = 0;
         f_JUMP = 0;
-        f_jHeight = 0;
+        f_REG = 0;
         f_WGHT = 0;
 
         visionLayerMasks = LayerMask.GetMask("Ground");
@@ -63,9 +63,9 @@ public class EnemySpawner : Enemies
         enemyScript.f_SPD += this.f_SPD;
         enemyScript.f_DEF += this.f_DEF;
 
-        enemyScript.f_CD += this.f_CD;
+        enemyScript.f_ATKSPD += this.f_ATKSPD;
         enemyScript.f_JUMP += this.f_JUMP;
-        enemyScript.f_jHeight += this.f_jHeight;
+        enemyScript.f_REG += this.f_REG;
         enemyScript.f_WGHT += this.f_WGHT;
 
         //decrement number of enemies to spawn

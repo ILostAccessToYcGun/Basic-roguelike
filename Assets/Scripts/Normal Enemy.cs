@@ -119,7 +119,7 @@ public class NormalEnemy : Enemies
                     else
                         MoveLeft();
 
-                    if (transform.position.y < player.transform.position.y - (0.5f * player.f_jHeight))
+                    if (transform.position.y < player.transform.position.y - (0.5f * player.transform.localScale.y))
                         Jump();
                 }
                 else
@@ -159,9 +159,9 @@ public class NormalEnemy : Enemies
         DEF = 5;
 
         //special stats
-        CD = 0;
+        ATKSPD = 0;
         JUMP = 1;
-        jHeight = 1;
+        REG = 0;
         WGHT = 3;
 
         InitializeStats();
