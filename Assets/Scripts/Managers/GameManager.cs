@@ -19,15 +19,38 @@ public class GameManager : MonoBehaviour
 
     public int stageCount;
 
-    // Start is called before the first frame update
-    void Start()
+    public void SetGameState(GameState gs)
     {
-        
+        switch (gs)
+        {
+            case GameState.In_Game:
+                currentGameState = GameState.In_Game;
+                uiManager.PauseMenuToggle(false);
+                break;
+            case GameState.Paused:
+                currentGameState = GameState.Paused;
+                uiManager.PauseMenuToggle(true);
+                break;
+            case GameState.Main_Menu:
+                currentGameState = GameState.Main_Menu;
+                //switch scene
+                uiManager.MainMenuToggle(true);
+                break;
+            case GameState.Win:
+                currentGameState = GameState.Win;
+                //huh
+                break;
+            case GameState.Lose:
+                currentGameState = GameState.Lose;
+                //huh
+                break;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        buffManager = FindAnyObjectByType<BuffManager>();
+        stageManager = FindAnyObjectByType<StageManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        SetGameState(GameState.Main_Menu);
     }
 }
