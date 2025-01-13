@@ -58,6 +58,6 @@ public class GameManager : MonoBehaviour
         buffManager = FindAnyObjectByType<BuffManager>();
         stageManager = FindAnyObjectByType<StageManager>();
         uiManager = FindAnyObjectByType<UIManager>();
-        SetGameState(GameState.Main_Menu);
+        ChangeGameState(GameState.Main_Menu);
     }
 }
