@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -19,32 +20,38 @@ public class GameManager : MonoBehaviour
 
     public int stageCount;
 
-    public void SetGameState(GameState gs)
+    public void ChangeGameState(GameState gs)
     {
-        switch (gs)
+        //add in some checks to see what was the previous game state and do the things you need to de between the previous and the new (gs)
+        switch (currentGameState) //this is the game state we are leaving
+        {
+            case GameState.Paused:
+                uiManager.PauseMenuToggle(false);
+                Time.timeScale = 1f;
+                break;
+        }
+
+        switch (gs) //game state we are entering
         {
             case GameState.In_Game:
-                currentGameState = GameState.In_Game;
-                uiManager.PauseMenuToggle(false);
                 break;
             case GameState.Paused:
-                currentGameState = GameState.Paused;
                 uiManager.PauseMenuToggle(true);
+                Time.timeScale = 0f;
                 break;
             case GameState.Main_Menu:
-                currentGameState = GameState.Main_Menu;
                 //switch scene
                 uiManager.MainMenuToggle(true);
                 break;
             case GameState.Win:
-                currentGameState = GameState.Win;
                 //huh
                 break;
             case GameState.Lose:
-                currentGameState = GameState.Lose;
                 //huh
                 break;
         }
+
+        currentGameState = gs;
     }
     private void Awake()
     {
