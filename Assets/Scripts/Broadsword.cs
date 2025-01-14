@@ -127,8 +127,6 @@ public class Broadsword : Characters
 
         InitializeStats();
 
-        uiManager = FindAnyObjectByType<UIManager>();
-
         ITEM = Weapons.Sword;
         swordObject = GetComponentInChildren<Sword>();
 

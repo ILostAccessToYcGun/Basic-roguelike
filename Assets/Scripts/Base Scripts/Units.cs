@@ -64,7 +64,7 @@ public class Units : MonoBehaviour
 
     
 
-    protected void InitializeStats()
+    protected virtual void InitializeStats()
     {
         //main stats
         CurrentHP = MaxHP;
@@ -206,7 +206,8 @@ public class Units : MonoBehaviour
 
             pointAngle.eulerAngles += new Vector3(0, 0, dif);
             //point the weapon towards the mouse
-            _weapon.transform.rotation = pointAngle;
+            if (Time.timeScale != 0)
+                _weapon.transform.rotation = pointAngle;
         }
         else
             return;

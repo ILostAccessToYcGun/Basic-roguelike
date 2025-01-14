@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     BuffManager buffManager;
     StageManager stageManager;
     UIManager uiManager;
+    Characters player;
     //EnemySpawner enemySpawner
 
     public enum GameState { In_Game, Paused, Main_Menu, Win, Lose}
@@ -22,18 +23,42 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGameState(GameState gs)
     {
+        //if (currentGameState == gs) return; 
         //add in some checks to see what was the previous game state and do the things you need to de between the previous and the new (gs)
         switch (currentGameState) //this is the game state we are leaving
         {
+            case GameState.In_Game:
+                uiManager.EliminateEnemiesUIToggle(false);
+                uiManager.SurviveUIToggle(false);
+                break;
             case GameState.Paused:
                 uiManager.PauseMenuToggle(false);
+                uiManager.PlayerStatsUIToggle(false);
                 Time.timeScale = 1f;
+                break;
+            case GameState.Main_Menu:
+                //switch scene
+                uiManager.MainMenuToggle(false);
+                break;
+            case GameState.Win:
+                //huh
+                break;
+            case GameState.Lose:
+                //huh
                 break;
         }
 
         switch (gs) //game state we are entering
         {
             case GameState.In_Game:
+                if (stageManager.currentClrCon == StageManager.ClearCondition.Survive)
+                {
+                    uiManager.SurviveUIToggle(true);
+                }
+                else if (stageManager.currentClrCon == StageManager.ClearCondition.Eliminate)
+                {
+                    uiManager.EliminateEnemiesUIToggle(true);
+                }
                 break;
             case GameState.Paused:
                 uiManager.PauseMenuToggle(true);
@@ -58,6 +83,7 @@ public class GameManager : MonoBehaviour
         buffManager = FindAnyObjectByType<BuffManager>();
         stageManager = FindAnyObjectByType<StageManager>();
         uiManager = FindAnyObjectByType<UIManager>();
+        player = FindAnyObjectByType<Characters>();
         ChangeGameState(GameState.Main_Menu);
     }
 }

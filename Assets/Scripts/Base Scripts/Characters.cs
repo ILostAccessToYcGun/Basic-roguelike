@@ -7,15 +7,22 @@ public class Characters : Units
     public UIManager uiManager;
     public Buff currentBuff; //eventually I should make this general to include all interactables
     public ShopKeeper shopKeeper;
+    public GameManager gameManager;
 
 
-    public Vector3 mousePos;
+    protected Vector3 mousePos;
     protected float attackTimer;
     protected int attackDirection = 1;
     protected Quaternion currentAngle;
 
-    protected bool isEscapeReleased;
     protected bool notUsedBuffYet = true;
+
+    protected override void InitializeStats()
+    {
+        base.InitializeStats();
+        uiManager = FindAnyObjectByType<UIManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
+    }
 
     protected void Movement()
     {
@@ -68,15 +75,23 @@ public class Characters : Units
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isEscapeReleased = false;
-            
-            if (uiManager.PauseMenuUI.activeSelf == true)
-                uiManager.PauseMenuToggle(false);
-            else if (uiManager.PlayerStatsUI.activeSelf == true)
-                uiManager.PlayerStatsUIToggle(false);
-            else
-                uiManager.PauseMenuToggle(true);
-            //TODO: game manager change state here
+            if (gameManager.currentGameState == GameManager.GameState.In_Game)
+            {
+                gameManager.ChangeGameState(GameManager.GameState.Paused);
+            }
+            else if (gameManager.currentGameState == GameManager.GameState.Paused)
+            {
+                gameManager.ChangeGameState(GameManager.GameState.In_Game);
+            }
+
+
+            //if (uiManager.PauseMenuUI.activeSelf == true)
+            //    uiManager.PauseMenuToggle(false);
+            //else if (uiManager.PlayerStatsUI.activeSelf == true)
+            //    uiManager.PlayerStatsUIToggle(false);
+            //else
+            //    uiManager.PauseMenuToggle(true);
+            ////TODO: game manager change state here
         }
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F))

@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     //I want the managers to be singletons i think.
     private StageManager stageManager;
     private Characters player;
+    private GameManager gameManager;
     
     
 
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
     {
         stageManager = FindAnyObjectByType<StageManager>();
         player = FindAnyObjectByType<Characters>();
+        gameManager = FindAnyObjectByType<GameManager>();
 
         if (StageClearUI != null )
         {
@@ -94,6 +96,7 @@ public class UIManager : MonoBehaviour
     public void ButtonPlay()
     {
         Debug.Log("Play");
+        gameManager.ChangeGameState(GameManager.GameState.In_Game);
         //Change Game manager state
         //changeScene
     }
@@ -110,14 +113,13 @@ public class UIManager : MonoBehaviour
     public void ButtonResume()
     {
         Debug.Log("Resume");
-        PauseMenuToggle(false);
-        //change to appropriate game state
+        gameManager.ChangeGameState(GameManager.GameState.In_Game);
     }
 
     public void ButtonReturnToMainMenu()
     {
         Debug.Log("ReturnToMainMenu");
-        //change scene
+        gameManager.ChangeGameState(GameManager.GameState.Main_Menu);
     }
 
     public void ButtonPlayerStats()
@@ -125,7 +127,8 @@ public class UIManager : MonoBehaviour
         Debug.Log("PlayerStats");
         PlayerStatsUIToggle(true);
         PauseMenuToggle(false);
-        //TODO:change game state?
+        //no change game state, player stats will be part of the pause game state
+        //TODO: maybe just move the camera to be centered on the player
     }
     #endregion
 
