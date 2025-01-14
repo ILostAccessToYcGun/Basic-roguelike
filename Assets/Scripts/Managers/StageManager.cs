@@ -12,6 +12,7 @@ public class StageManager : MonoBehaviour
     private BuffManager buffManager;
     private EnemySpawner spawner;
     private UIManager uiManager;
+    private GameManager gameManager;
 
     public List<GameObject> stages;
     public Rigidbody stageToSpawn; //TODO: For later
@@ -83,7 +84,7 @@ public class StageManager : MonoBehaviour
         //Open door to shop
         //spawn the shop buffs and crystal stuff
         buffManager.SpawnBuff();
-        //TODO: Update Game manager stage count
+        gameManager.IncrementStageCount();
     }
 
     private void MoveStagePOI(Vector3 newPosition) //eventually I want to lerp this so its smooth
@@ -102,6 +103,7 @@ public class StageManager : MonoBehaviour
         spawner = FindAnyObjectByType<EnemySpawner>();
         buffManager = FindAnyObjectByType<BuffManager>();
         uiManager = FindAnyObjectByType<UIManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
 
         BeginStage();
     }

@@ -21,6 +21,16 @@ public class GameManager : MonoBehaviour
 
     public int stageCount;
 
+
+    public void IncrementStageCount()
+    {
+        stageCount++;
+    }
+
+    public void ResetStageCount()
+    {
+        stageCount = 0;
+    }
     public void ChangeGameState(GameState gs)
     {
         //if (currentGameState == gs) return; 
@@ -84,6 +94,8 @@ public class GameManager : MonoBehaviour
         stageManager = FindAnyObjectByType<StageManager>();
         uiManager = FindAnyObjectByType<UIManager>();
         player = FindAnyObjectByType<Characters>();
+
+        stageCount = 0;
         ChangeGameState(GameState.Main_Menu);
     }
 }
