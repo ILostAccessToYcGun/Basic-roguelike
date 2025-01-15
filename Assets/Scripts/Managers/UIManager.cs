@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
 
@@ -96,8 +97,8 @@ public class UIManager : MonoBehaviour
     public void ButtonPlay()
     {
         Debug.Log("Play");
-        gameManager.ChangeGameState(GameManager.GameState.In_Game);
-        //Change Game manager state
+        //gameManager.ChangeGameState(GameManager.GameState.In_Game);
+        SceneManager.LoadScene("TestStage", LoadSceneMode.Single);
         //changeScene
     }
 

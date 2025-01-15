@@ -190,22 +190,11 @@ public class Units : MonoBehaviour
     */
 
     //TODO: Optimize these calculations theres gonna be a lot of these
-    protected void PointWeapon(GameObject _weapon, Vector2 target)
+    protected void PointWeapon(GameObject _weapon, Vector2 _target)
     {
         if (_weapon != null)
         {
-            // get direction you want to point at
-            Vector2 direction = (target - (Vector2)transform.position).normalized;
-
-            float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
-
-            if (target.x < transform.position.x)
-                currAngle = 180 - currAngle;
-
-            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle) - 90;
-
-            pointAngle.eulerAngles += new Vector3(0, 0, dif);
-            //point the weapon towards the mouse
+            GetPointAngle(_weapon, _target);
             if (Time.timeScale != 0)
                 _weapon.transform.rotation = pointAngle;
         }
@@ -213,24 +202,25 @@ public class Units : MonoBehaviour
             return;
     }
 
-    protected void GetPointAngle(GameObject _weapon, Vector2 target)
+    protected void SetWeaponPointAngle(GameObject _weapon, Vector2 _target)
     {
         if (_weapon != null)
-        {
-            // get direction you want to point at
-            Vector2 direction = (target - (Vector2)transform.position).normalized;
-
-            float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
-
-            if (target.x < transform.position.x)
-                currAngle = 180 - currAngle;
-
-            float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle) - 90;
-
-            pointAngle.eulerAngles += new Vector3(0, 0, dif);
-        }
+            GetPointAngle(_weapon, _target);
         else
             return;
+    }
+
+    protected void GetPointAngle(GameObject _weapon, Vector2 target)
+    {
+
+        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        float currAngle = Mathf.Asin(direction.y) * Mathf.Rad2Deg;
+        if (target.x < transform.position.x)
+            currAngle = 180 - currAngle;
+
+        float dif = Mathf.DeltaAngle(_weapon.transform.localEulerAngles.z, currAngle) - 90;
+        pointAngle.eulerAngles += new Vector3(0, 0, dif);
+        
     }
 
 

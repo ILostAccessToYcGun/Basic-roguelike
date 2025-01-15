@@ -3,9 +3,27 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<GameManager>();
+            }
+
+            return _instance;
+        }
+    }
+
+
+
     //Stage Count
     //Game States(In-Game, Pasued, Main Menu, Win, Lose)
     //Other managers, Buff manager, Stage Managers, UI Manager, Enemy Spawner(technically a manager)
@@ -38,8 +56,10 @@ public class GameManager : MonoBehaviour
         switch (currentGameState) //this is the game state we are leaving
         {
             case GameState.In_Game:
-                uiManager.EliminateEnemiesUIToggle(false);
-                uiManager.SurviveUIToggle(false);
+                if (uiManager.EliminateEnemiesUI)
+                    uiManager.EliminateEnemiesUIToggle(false);
+                if (uiManager.SurviveUI)
+                    uiManager.SurviveUIToggle(false);
                 break;
             case GameState.Paused:
                 uiManager.PauseMenuToggle(false);
@@ -90,12 +110,32 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        buffManager = FindAnyObjectByType<BuffManager>();
-        stageManager = FindAnyObjectByType<StageManager>();
-        uiManager = FindAnyObjectByType<UIManager>();
-        player = FindAnyObjectByType<Characters>();
+        DontDestroyOnLoad(gameObject);
 
-        stageCount = 0;
-        ChangeGameState(GameState.Main_Menu);
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        } 
+        else
+        {
+            _instance = this;
+        }
+
+        uiManager = FindAnyObjectByType<UIManager>();
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("TitleScreen"))
+        {
+            buffManager = FindAnyObjectByType<BuffManager>();
+            stageManager = FindAnyObjectByType<StageManager>();
+            player = FindAnyObjectByType<Characters>();
+        }
+        else
+        {
+            stageCount = 0;
+            ChangeGameState(GameState.Main_Menu);
+            Debug.Log("Mainmenu");
+        }
+        
+
+        
     }
-}
+}   

@@ -19,7 +19,7 @@ public class StageManager : MonoBehaviour
     public GameObject stagePOI;
 
     //public float stageSize;
-    public enum ClearCondition { Survive, Eliminate };
+    public enum ClearCondition { Intermission, Survive, Eliminate };
     public ClearCondition currentClrCon;
 
     public void UpdateEnemyCount(int update)
@@ -95,7 +95,7 @@ public class StageManager : MonoBehaviour
     private void Awake()
     {
         isStageCleared = false;
-        currentClrCon = ClearCondition.Survive;
+        currentClrCon = ClearCondition.Intermission;
         enemiesAlive = 0;
         timeToSurvive = 0;
         targetEnemyCount = 0;
@@ -105,7 +105,7 @@ public class StageManager : MonoBehaviour
         uiManager = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
 
-        BeginStage();
+        //BeginStage();
     }
     void Update()
     {

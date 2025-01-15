@@ -11,7 +11,7 @@ public class Broadsword : Characters
     private float swordSwingRange;
     public bool isSwingingSword;
     private bool isSecondSwing;
-    private int singularFrameDelay = 1;
+    public int singularFrameDelay = 1;
 
     private Sword swordObject;
 
@@ -75,8 +75,8 @@ public class Broadsword : Characters
         }
         else
         {
-            if (singularFrameDelay > 0)
-                singularFrameDelay--;
+            //if (singularFrameDelay > 0)
+            //    singularFrameDelay--;
         }
     }
 
@@ -84,7 +84,8 @@ public class Broadsword : Characters
     {
         if (attackDelay < 0) //if we have no more delay, stop the attack
         {
-            WPN.transform.rotation = midAngle;
+            //TODO: after we attack this line, causes the blade to move to the center of the angle for 1 frame, id like to remove this eventually
+            WPN.transform.rotation = midAngle; 
             isSwingingSword = false;
             singularFrameDelay = 1;
 
@@ -148,18 +149,7 @@ public class Broadsword : Characters
             OtherControls();
             RegenHealth();
 
-            //if we are swinging, stop pointing and swing
-            if (isSwingingSword)
-                SwordAttack();
-            else
-            {
-                if (singularFrameDelay > 0)
-                    PointWeapon(WPN, (Vector2)mousePos);
-                else
-                    GetPointAngle(WPN, (Vector2)mousePos);
-            }
-
-            if (Input.GetAxisRaw("Attack") == 1) 
+            if (Input.GetAxisRaw("Attack") == 1)
                 PrepareSwordSwing();
             else
             {
@@ -169,6 +159,28 @@ public class Broadsword : Characters
                 //stop continuous swing
                 isSecondSwing = false;
             }
+
+            
+            //if we are swinging, stop pointing and swing
+            if (isSwingingSword)
+                SwordAttack();
+            else
+            {
+                if (singularFrameDelay > 0)
+                {
+                    SetWeaponPointAngle(WPN, (Vector2)mousePos);
+                    singularFrameDelay--;
+                }
+                else
+                {
+                    PointWeapon(WPN, (Vector2)mousePos);
+                    //Debug.Log("point weapon");
+                }
+                    
+
+            }
+
+            
         }
     }
 }
