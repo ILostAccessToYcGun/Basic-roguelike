@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -14,9 +15,11 @@ public class StageManager : MonoBehaviour
     private UIManager uiManager;
     private GameManager gameManager;
 
-    public List<GameObject> stages;
-    public Rigidbody stageToSpawn; //TODO: For later
+    public List<Rigidbody2D> stages;
+    public Rigidbody2D stageToSpawn; //TODO: For later
     public GameObject stagePOI;
+
+    public List<Door> doors;
 
     //public float stageSize;
     public enum ClearCondition { Intermission, Survive, Eliminate };
@@ -87,9 +90,40 @@ public class StageManager : MonoBehaviour
         gameManager.IncrementStageCount();
     }
 
-    private void MoveStagePOI(Vector3 newPosition) //eventually I want to lerp this so its smooth
+    private void AdvanceStagePosition() //Find stage point of reference and warp
+    {
+        //transform.position = new Vector2(transform.position.x + 43, transform.position.y);
+    }
+
+    private void MoveStagePOI(Vector3 newPosition) //eventually I want to lerp this so its smooth?
     {
         stagePOI.transform.position = newPosition;
+    }
+
+    private void SpawnStage()
+    {
+        int rand = Random.Range(0, stages.Count);
+        stageToSpawn = stages[rand];
+        Rigidbody2D stageInstance;
+
+        //point of reference system
+        //in short i dont wanna hard code this. I think what i should do is
+        //make a point of reference empty object that the stage manager will teleport to when spaning the stage.
+        //the point of reference will be in the hallway section of the map, so we have one elevation correct, then we use the
+        //written code to move the stage to be spawned to the reference point elevation
+        
+
+        stageInstance = Instantiate(stageToSpawn, transform.position, transform.rotation);
+
+        Door[] stageDoors = stageInstance.GetComponentsInChildren<Door>();
+
+        foreach (Door door in stageDoors)
+        {
+            if (door.doorType == Door.DoorType.Entry)
+            {
+                stageInstance.transform.position = new Vector2(stageInstance.transform.position.x, door.transform.localPosition.y * -1);
+            }
+        }
     }
 
     private void Awake()

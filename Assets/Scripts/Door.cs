@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    private StageManager stageManager;
+
     public GameObject door;
     private float closeElevation;
     private float openElevation;
@@ -27,6 +29,8 @@ public class Door : MonoBehaviour
 
     private void Awake()
     {
+        stageManager = FindAnyObjectByType<StageManager>();
+
         closeElevation =  transform.position.y; 
         openElevation =  transform.position.y + transform.localScale.y; 
 
@@ -34,6 +38,7 @@ public class Door : MonoBehaviour
         {
             case DoorType.Entry:
                 doorRenderer.color = new Color(50f / 255f, 1f, 150f / 255f, 1f);
+                OpenDoor();
                 break;
             case DoorType.Exit:
                 doorRenderer.color = new Color(1f, 150f / 255f, 50f / 255f, 1f);
@@ -52,13 +57,18 @@ public class Door : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (collision.gameObject.transform.position.x > transform.position.x) //if the player exits from the right
+            if (doorType == DoorType.Entry)
             {
-                CloseDoor();
-                //close all doors in teh stage, 
-                //delete the previous stage
-                //move the stage poi
+                if (collision.gameObject.transform.position.x > transform.position.x) //if the player exits from the right
+                {
+                    CloseDoor();
+                    
+                    //close all doors in teh stage, 
+                    //delete the previous stage
+                    //move the stage poi
+                }
             }
+            
         }
             
             
