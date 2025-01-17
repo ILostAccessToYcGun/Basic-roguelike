@@ -48,4 +48,13 @@ MonoBehaviour:
   timeToSurvive: 0
   isStageCleared: 0
   targetEnemyCount: 0
+  stages:
+  - {fileID: 962958920984584431, guid: 615e33146d2b0834499a000f1fcee455, type: 3}
+  stageToSpawn: {fileID: 0}
+  stagePOI: {fileID: 0}
+  nextStagePOI: {x: 0, y: 0}
+  shop: {fileID: 1865973004902824921, guid: 8efba94cbfcb6ec4abd0757abd7407c1, type: 3}
+  isNextStageShop: 0
+  stageDoors: []
+  pointOfReference: {fileID: 0}
   currentClrCon: 0

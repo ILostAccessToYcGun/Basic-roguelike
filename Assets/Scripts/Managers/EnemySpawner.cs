@@ -9,6 +9,7 @@ public class EnemySpawner : Enemies
     public int enemiesToSpawn; //public for now, but will be dictated by the stage manager
 
     public Rigidbody2D normalEnemy;
+    public Vector2 spawnCenter;
 
     //  https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Object.Instantiate.html
 
@@ -30,6 +31,11 @@ public class EnemySpawner : Enemies
         visionLayerMasks = LayerMask.GetMask("Ground");
     }
 
+    public void ChangeCenter(Vector2 newCenter)
+    {
+        spawnCenter = newCenter;
+    }
+
     //TODO: Eventually when I add juice to this game, I want the spawner to move inbetween the random locations, instead of teleporting
     public void MoveSpawner()
     {
@@ -38,7 +44,7 @@ public class EnemySpawner : Enemies
         //get the stage size first, im going to hard code it for now because I havent gotten to that buff
         //x between -19 and 19
         //y between -9.5 and 9
-        transform.position = new Vector2(Random.Range(-19f, 19), Random.Range(-9.5f, 9.5f));
+        transform.position = new Vector2(Random.Range(spawnCenter.x - 19f, spawnCenter.x + 19f), Random.Range(spawnCenter.y - 9.5f, spawnCenter.y + 9.5f));
     }
 
     public void CheckValidSpawnLocation()

@@ -15,11 +15,17 @@ public class StageManager : MonoBehaviour
     private UIManager uiManager;
     private GameManager gameManager;
 
-    public List<Rigidbody2D> stages;
-    public Rigidbody2D stageToSpawn; //TODO: For later
+    public List<GameObject> stages;
+    public GameObject stageToSpawn;
     public GameObject stagePOI;
+    public List<Vector2> allStagePOIs;
+    public int stagePOIIndex;
 
-    public List<Door> doors;
+    public GameObject shop;
+    public bool isNextStageShop = false;
+
+    public Door[] stageDoors;
+    public PointOfReference pointOfReference;
 
     //public float stageSize;
     public enum ClearCondition { Intermission, Survive, Eliminate };
@@ -59,7 +65,8 @@ public class StageManager : MonoBehaviour
 
     private void BeginStage()
     {
-        int random = Random.Range(0, 2);
+        isStageCleared = false;
+        int random = Random.Range(1, 3);
         currentClrCon = (ClearCondition)random;
 
         int randomEnemyCount = Random.Range(7, 13); //TODO: Endit these values based on stage size?
@@ -83,47 +90,88 @@ public class StageManager : MonoBehaviour
     private void EndStage()
     {
         isStageCleared = true;
+        currentClrCon = ClearCondition.Intermission;
         uiManager.StageCleared();
-        //Open door to shop
+        spawner.enabled = false;
+        foreach (Door door in stageDoors)
+        {
+            if (door.doorType == Door.DoorType.Exit)
+                door.OpenDoor();
+        }
         //spawn the shop buffs and crystal stuff
+        SpawnStage();
         buffManager.SpawnBuff();
         gameManager.IncrementStageCount();
+        SpawnStage();
+
     }
 
-    private void AdvanceStagePosition() //Find stage point of reference and warp
+    private void MoveToPointOfReference()
     {
-        //transform.position = new Vector2(transform.position.x + 43, transform.position.y);
+        transform.position = pointOfReference.gameObject.transform.position;
     }
 
-    private void MoveStagePOI(Vector3 newPosition) //eventually I want to lerp this so its smooth?
+    public void NextStagePOI() //eventually I want to lerp this so its smooth?
     {
-        stagePOI.transform.position = newPosition;
+        if (stagePOIIndex < allStagePOIs.Count - 1)
+            stagePOIIndex++;
+        stagePOI.transform.position = allStagePOIs[stagePOIIndex];
+    }
+    public void PreviousStagePOI() //eventually I want to lerp this so its smooth?
+    {
+        if (stagePOIIndex > 0)
+            stagePOIIndex--;
+        stagePOI.transform.position = allStagePOIs[stagePOIIndex];
     }
 
     private void SpawnStage()
     {
-        int rand = Random.Range(0, stages.Count);
-        stageToSpawn = stages[rand];
-        Rigidbody2D stageInstance;
+        stageDoors = new Door[2];
+        switch (isNextStageShop)
+        {
+            case false:
+                int rand = Random.Range(0, stages.Count);
+                stageToSpawn = stages[rand];
+                break;
+            case true:
+                stageToSpawn = shop;
+                break;
+        }
+        isNextStageShop = !isNextStageShop;
+        GameObject stageInstance;
 
         //point of reference system
         //in short i dont wanna hard code this. I think what i should do is
         //make a point of reference empty object that the stage manager will teleport to when spaning the stage.
         //the point of reference will be in the hallway section of the map, so we have one elevation correct, then we use the
         //written code to move the stage to be spawned to the reference point elevation
-        
 
         stageInstance = Instantiate(stageToSpawn, transform.position, transform.rotation);
-
-        Door[] stageDoors = stageInstance.GetComponentsInChildren<Door>();
-
+        pointOfReference = stageInstance.GetComponentInChildren<PointOfReference>();
+        
+        stageDoors = stageInstance.GetComponentsInChildren<Door>();
         foreach (Door door in stageDoors)
         {
-            if (door.doorType == Door.DoorType.Entry)
+            door.SetDoorStats();
+            if (door.doorType == Door.DoorType.Entry || door.doorType == Door.DoorType.Pass)
             {
-                stageInstance.transform.position = new Vector2(stageInstance.transform.position.x, door.transform.localPosition.y * -1);
+                stageInstance.transform.position = new Vector2(this.transform.position.x + 21f, this.transform.position.y + (door.transform.localPosition.y * -1));
             }
         }
+        allStagePOIs.Add(stageInstance.transform.position);
+        spawner.ChangeCenter(stageInstance.transform.position);
+        spawner.MoveSpawner();
+        MoveToPointOfReference();
+    }
+
+    public void StageBeginSequence()
+    {
+        foreach (Door door in stageDoors)
+        {
+            door.CloseDoor();
+        }
+        spawner.enabled = true;
+        BeginStage();
     }
 
     private void Awake()
@@ -139,7 +187,16 @@ public class StageManager : MonoBehaviour
         uiManager = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
 
+
+        allStagePOIs.Add(new Vector2(0, 0));
+        pointOfReference = FindAnyObjectByType<PointOfReference>();
+        MoveToPointOfReference();
+        SpawnStage();
+        Debug.Log("e");
+
         //BeginStage();
+
+
     }
     void Update()
     {
@@ -151,8 +208,10 @@ public class StageManager : MonoBehaviour
                 uiManager.UpdateUISurviveTimer();
                 CheckClearCondition();
                 if (enemiesAlive < targetEnemyCount)
+                {
                     spawner.enabled = true;
                     spawner.enemiesToSpawn = targetEnemyCount - enemiesAlive;
+                }
             }
         }
     }

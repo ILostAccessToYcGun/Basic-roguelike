@@ -117,11 +117,11 @@ public class Broadsword : Characters
         //main stats
         MaxHP = 60;
         ATK = 5;
-        SPD = 5;
+        SPD = 9; //TEMP
         DEF = 10;
 
         //special stats
-        ATKSPD = 0;
+        ATKSPD = 10; //TEMP
         JUMP = 1;
         REG = 5;
         WGHT = 5;

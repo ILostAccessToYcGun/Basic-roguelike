@@ -223,8 +223,6 @@ public class Units : MonoBehaviour
         
     }
 
-
-
     public void TakeDamage(int damageSource)
     {
         CurrentHP -= damageSource;
@@ -303,6 +301,7 @@ public class Units : MonoBehaviour
         }
         else //OKAY THIS IS STARTING TO FEEL BETTER, NOW MAKE WALL JUMP, AN ALTERNATIVE TO JUMP
         {
+            
             if (collision.transform.position.y + (0.5f * collision.transform.localScale.y) < transform.position.y - (0.5f * transform.localScale.y))
             {
                 if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
