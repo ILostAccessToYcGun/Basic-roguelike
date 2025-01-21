@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static BuffManager;
 
 public class RarityCrystal : Crystals
 {
@@ -19,57 +20,97 @@ public class RarityCrystal : Crystals
             Mathf.Floor((float)buffManager.GradeLegendaryChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%";
     }
 
+    private void ChangeRarity(BuffManager.Grade grade, int modifier) 
+    {
+        //TODO: THIS NEEDS A LOT OF WORK
+        int check = 0;
+        switch (grade)
+        {
+            case BuffManager.Grade.Common:
+                check = shopKeeper.saCommon + modifier;
+                break;
+            case BuffManager.Grade.Uncommon:
+                check = shopKeeper.saUncommon + modifier;
+                break;
+            case BuffManager.Grade.Rare:
+                check = shopKeeper.saRare + modifier;
+                break;
+            case BuffManager.Grade.Epic:
+                check = shopKeeper.saEpic + modifier;
+                break;
+            case BuffManager.Grade.Legendary:
+                check = shopKeeper.saLegendary + modifier;
+                break;
+        }
+
+
+        if (Mathf.Abs(check) < shopKeeper.allocationLimit)
+        {
+            buffManager.ChangeGradeChance(grade, modifier);
+            UpdateRarityChanceUI();
+            switch (grade)
+            {
+                case BuffManager.Grade.Common:
+                    shopKeeper.saCommon += modifier;
+                    break;
+                case BuffManager.Grade.Uncommon:
+                    shopKeeper.saUncommon += modifier;
+                    break;
+                case BuffManager.Grade.Rare:
+                    shopKeeper.saRare += modifier;
+                    break;
+                case BuffManager.Grade.Epic:
+                    shopKeeper.saEpic += modifier;
+                    break;
+                case BuffManager.Grade.Legendary:
+                    shopKeeper.saLegendary += modifier;
+                    break;
+            }
+            //TODO: add a way to select your upgrades before locking them in?
+        }
+    }
+
     public void CommonPlus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Common, 1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Common, 1);
     }
     public void CommonMinus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Common, -1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Common, -1);
     }
     public void UncommonPlus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Uncommon, 1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Uncommon, 1);
     }
     public void UncommonMinus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Uncommon, -1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Uncommon, -1);
     }
 
     public void RarePlus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Rare, 1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Rare, 1);
     }
     public void RareMinus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Rare, -1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Rare, -1);
     }
 
     public void EpicPlus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Epic, 1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Epic, 1);
     }
     public void EpicMinus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Epic, -1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Epic, -1);
     }
 
     public void LegendaryPlus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Legendary, 1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Legendary, 1);
     }
     public void LegendaryMinus()
     {
-        buffManager.ChangeGradeChance(BuffManager.Grade.Legendary, -1);
-        UpdateRarityChanceUI();
+        ChangeRarity(BuffManager.Grade.Legendary, -1);
     }
 }

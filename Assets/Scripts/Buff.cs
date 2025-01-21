@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Buff : HoverableInteractables
 {
-    private BuffManager bm;
+    private BuffManager buffManager;
     private Characters player;
 
     private UIManager uiManager;
@@ -27,38 +27,38 @@ public class Buff : HoverableInteractables
 
     private void RandomizeBuffRarity()
     {
-        int chance = Random.Range(0, bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance + bm.GradeLegendaryChance);
+        int chance = Random.Range(0, buffManager.GradeCommonChance + buffManager.GradeUncommonChance + buffManager.GradeRareChance + buffManager.GradeEpicChance + buffManager.GradeLegendaryChance);
 
         //giving a random rarity based on how rare it is ( buff manager for chance )
-        if (chance < bm.GradeCommonChance)
+        if (chance < buffManager.GradeCommonChance)
         {
             rarity = BuffManager.Grade.Common;
             RarityText.text = "Common";
             BuffDescriptionUI.color = new Color(210f / 255f, 210f / 255f, 210f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.white;
         }
-        else if (chance < bm.GradeUncommonChance + bm.GradeCommonChance)
+        else if (chance < buffManager.GradeUncommonChance + buffManager.GradeCommonChance)
         {
             rarity = BuffManager.Grade.Uncommon;
             RarityText.text = "Uncommon";
             BuffDescriptionUI.color = new Color(147f / 255f, 255f / 255f, 129f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.green;
         }
-        else if (chance < bm.GradeRareChance + bm.GradeCommonChance + bm.GradeUncommonChance)
+        else if (chance < buffManager.GradeRareChance + buffManager.GradeCommonChance + buffManager.GradeUncommonChance)
         {
             rarity = BuffManager.Grade.Rare;
             RarityText.text = "Rare";
             BuffDescriptionUI.color = new Color(100f / 255f, 205f / 255f, 255f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.blue;
         }
-        else if (chance < bm.GradeEpicChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance)
+        else if (chance < buffManager.GradeEpicChance + buffManager.GradeCommonChance + buffManager.GradeUncommonChance + buffManager.GradeRareChance)
         {
             rarity = BuffManager.Grade.Epic;
             RarityText.text = "Epic";
             BuffDescriptionUI.color = new Color(200f / 255f, 100f / 255f, 255f / 255f, 255f / 255f);
             //BuffDescriptionUI.color = Color.magenta;
         }
-        else if (chance < bm.GradeLegendaryChance + bm.GradeCommonChance + bm.GradeUncommonChance + bm.GradeRareChance + bm.GradeEpicChance)
+        else if (chance < buffManager.GradeLegendaryChance + buffManager.GradeCommonChance + buffManager.GradeUncommonChance + buffManager.GradeRareChance + buffManager.GradeEpicChance)
         {
             rarity = BuffManager.Grade.Legendary;
             RarityText.text = "Legendary";
@@ -182,7 +182,7 @@ public class Buff : HoverableInteractables
     {
         do
         {
-            bm.PickBuffStat(buffStatistic);
+            buffManager.PickBuffStat(buffStatistic);
             RandomizeStatValue(rarity, buffStatistic);
         }
         while (buffStatistic.buffValue == 0);//loop if the value is zero
@@ -233,14 +233,16 @@ public class Buff : HoverableInteractables
         //        player.f_jHeight += stat.buffValue;
         //}
         uiManager.UpdatePlayerStatsUI();
-        Destroy(gameObject);
+        //buffManager.buffsAlive.Remove(this.gameObject);
+        //Destroy(gameObject);
+        buffManager.ClearAllAliveBuffs();
     }
 
 
     private void Awake()
     {
         player = FindObjectOfType<Characters>();
-        bm = FindAnyObjectByType<BuffManager>();
+        buffManager = FindAnyObjectByType<BuffManager>();
         uiManager = FindAnyObjectByType<UIManager>();
         cam = FindAnyObjectByType<CameraMovement>();
         BuffStatsText.text = "";

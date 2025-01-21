@@ -94,7 +94,7 @@ public class Characters : Units
             ////TODO: game manager change state here
         }
 
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (currentBuff != null && notUsedBuffYet)
             {
@@ -106,7 +106,7 @@ public class Characters : Units
                 shopKeeper.InteractWithShopKeeper();
             }
         }
-        if (Input.GetKeyUp(KeyCode.E) || Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.E))
         {
             notUsedBuffYet = true;
         }

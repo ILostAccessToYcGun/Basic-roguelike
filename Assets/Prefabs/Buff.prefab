@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 1905522361714545482}
   - component: {fileID: 2035293854403752249}
   - component: {fileID: 3572227251255073273}
-  - component: {fileID: 6545109060446230745}
   m_Layer: 10
   m_Name: Buff
   m_TagString: Untagged
@@ -226,33 +225,6 @@ MonoBehaviour:
   rarity: 0
   cursed: 0
   outputText: 
---- !u!50 &6545109060446230745
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785575962044554162}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!1 &1031215353214653445
 GameObject:
   m_ObjectHideFlags: 0

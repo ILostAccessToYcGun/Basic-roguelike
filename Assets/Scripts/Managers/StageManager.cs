@@ -100,7 +100,7 @@ public class StageManager : MonoBehaviour
         }
         //spawn the shop buffs and crystal stuff
         SpawnStage();
-        buffManager.SpawnBuff();
+        buffManager.SpawnBuffsInShop();
         gameManager.IncrementStageCount();
         SpawnStage();
 
@@ -137,18 +137,11 @@ public class StageManager : MonoBehaviour
                 stageToSpawn = shop;
                 break;
         }
-        isNextStageShop = !isNextStageShop;
+        
         GameObject stageInstance;
-
-        //point of reference system
-        //in short i dont wanna hard code this. I think what i should do is
-        //make a point of reference empty object that the stage manager will teleport to when spaning the stage.
-        //the point of reference will be in the hallway section of the map, so we have one elevation correct, then we use the
-        //written code to move the stage to be spawned to the reference point elevation
-
         stageInstance = Instantiate(stageToSpawn, transform.position, transform.rotation);
         pointOfReference = stageInstance.GetComponentInChildren<PointOfReference>();
-        
+
         stageDoors = stageInstance.GetComponentsInChildren<Door>();
         foreach (Door door in stageDoors)
         {
@@ -158,6 +151,15 @@ public class StageManager : MonoBehaviour
                 stageInstance.transform.position = new Vector2(this.transform.position.x + 21f, this.transform.position.y + (door.transform.localPosition.y * -1));
             }
         }
+
+        if (isNextStageShop)
+        {
+            buffManager.buffLocations = stageInstance.GetComponentsInChildren<BuffSpawnLocation>();
+            Debug.Log(stageInstance.GetComponentsInChildren<BuffSpawnLocation>());
+            buffManager.ResetBuffIndex();
+        }
+        isNextStageShop = !isNextStageShop;
+
         allStagePOIs.Add(stageInstance.transform.position);
         spawner.ChangeCenter(stageInstance.transform.position);
         spawner.MoveSpawner();

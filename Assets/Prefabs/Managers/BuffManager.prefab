@@ -44,18 +44,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c372ba6a0363c784a8ae37dd03417dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buff: {fileID: 6545109060446230745, guid: f2d944a335dd38f43bf6557fc2f7e7b9, type: 3}
-  player: {fileID: 0}
+  buff: {fileID: 785575962044554162, guid: f2d944a335dd38f43bf6557fc2f7e7b9, type: 3}
   statChance: 0
   GradeCommonChance: 0
   GradeUncommonChance: 0
   GradeRareChance: 0
   GradeEpicChance: 0
   GradeLegendaryChance: 0
+  GradeTotalChance: 0
   MaxHPChance: 0
   ATKChance: 0
   SPDChance: 0
   DEFChance: 0
-  CDChance: 0
+  ATKSPDChance: 0
   JUMPChance: 0
-  jHGHTChance: 0
+  REGChance: 0
+  StatTotalChance: 0

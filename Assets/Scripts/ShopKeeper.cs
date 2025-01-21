@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class ShopKeeper : HoverableInteractables
@@ -10,6 +11,50 @@ public class ShopKeeper : HoverableInteractables
     public TextMeshProUGUI DialogueText;
     public bool isTalking;
     private float dialogueTimer;
+
+    #region All changeable stats
+
+    public int saCommon;
+    public int saUncommon;
+    public int saRare;
+    public int saEpic;
+    public int saLegendary;
+    public int saMaxHP;
+    public int saATK;
+    public int saSPD;
+    public int saDEF;
+    public int saATKSPD;
+    public int saJUMP;
+    public int saREG;
+
+    #endregion
+
+    public int allocationLimit;
+
+
+    public int GetTotalStatDifference()
+    {
+        int total = 0;
+
+        total += Mathf.Abs(saCommon);
+        total += Mathf.Abs(saUncommon);
+        total += Mathf.Abs(saRare);
+        total += Mathf.Abs(saEpic);
+        total += Mathf.Abs(saLegendary);
+        total += Mathf.Abs(saMaxHP);
+        total += Mathf.Abs(saATK);
+        total += Mathf.Abs(saSPD);
+        total += Mathf.Abs(saDEF);
+        total += Mathf.Abs(saATKSPD);
+        total += Mathf.Abs(saJUMP);
+        total += Mathf.Abs(saREG);
+
+        return total;
+    }
+    public void SetAllocationLimit(int limit)
+    {
+        allocationLimit = limit;
+    }
 
     public void ChangeDialogueText(string dialogue)
     {
@@ -29,6 +74,20 @@ public class ShopKeeper : HoverableInteractables
     private void Awake()
     {
         cam = FindAnyObjectByType<CameraMovement>();
+        SetAllocationLimit(3);
+
+        saCommon = 0;
+        saUncommon = 0;
+        saRare = 0;
+        saEpic = 0;
+        saLegendary = 0;
+        saMaxHP = 0;
+        saATK = 0;
+        saSPD = 0;
+        saDEF = 0;
+        saATKSPD = 0;
+        saJUMP = 0;
+        saREG = 0;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -53,9 +112,12 @@ public class ShopKeeper : HoverableInteractables
         }
         else
         {
-            DialogueUI.SetActive(false);
-            cam.RemovePOI(DialogueUI);
-            isTalking = false;
+            if (isTalking)
+            {
+                DialogueUI.SetActive(false);
+                cam.RemovePOI(DialogueUI);
+                isTalking = false;
+            }
         }
     }
 }

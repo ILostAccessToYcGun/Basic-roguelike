@@ -6,12 +6,12 @@ public class BuffManager : MonoBehaviour
 {
     public class BuffStat
     {
-        private BuffManager bm;
+        private BuffManager buffManager;
         public UnitStats unitStat;
         public int buffValue;
     }
 
-    public Rigidbody2D buff;
+    public GameObject buff;
     
     
     public enum Grade { Common, Uncommon, Rare, Epic, Legendary }
@@ -37,6 +37,9 @@ public class BuffManager : MonoBehaviour
     public int REGChance;
     public int StatTotalChance;
 
+    public BuffSpawnLocation[] buffLocations;
+    public int buffLocationIndex = 0;
+    public List<GameObject> buffsAlive;
     private void Awake()
     {
         ResetProbabilities();
@@ -81,12 +84,48 @@ public class BuffManager : MonoBehaviour
         TotalStatChance();
     }
 
-    public void SpawnBuff()
+    private void MoveToBuffLocation()
     {
-        Rigidbody2D buffPickup;
-        buffPickup = Instantiate(buff, transform.position, transform.rotation);
-        //NormalEnemy enemyScript = enemy.GetComponent<NormalEnemy>();
+        transform.position = buffLocations[buffLocationIndex].transform.position;
     }
+
+    public void IncrementBuffIndex()
+    {
+        buffLocationIndex++;
+    }
+
+    public void ResetBuffIndex()
+    {
+        buffLocationIndex = 0;
+    }
+
+    public void SpawnBuff() //TODO: chnage access modifier
+    {
+        GameObject buffPickup;
+        buffPickup = Instantiate(buff, transform.position, transform.rotation);
+        buffsAlive.Add(buffPickup);
+    }
+
+    public void SpawnBuffsInShop()
+    {
+        for (int i = 0; i < buffLocations.Length; i++)
+        {
+            MoveToBuffLocation();
+            SpawnBuff();
+            IncrementBuffIndex();
+        }
+    }
+
+    public void ClearAllAliveBuffs()
+    {
+        for (int i = 0; i < buffsAlive.Count;)
+        {
+            Destroy(buffsAlive[i]);
+            buffsAlive.Remove(buffsAlive[i]);
+        }
+        buffsAlive.Clear();
+    }
+    
 
     //I'm not sure how I want to do the chances, whether everything should add up to 100, or do addative chance
     //for now, because its easy it will do addative chance

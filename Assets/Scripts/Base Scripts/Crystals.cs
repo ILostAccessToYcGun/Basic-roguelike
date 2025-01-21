@@ -8,6 +8,7 @@ public class Crystals : HoverableInteractables
 {
     protected BuffManager buffManager;
     public TextMeshProUGUI percentages; //uhhhhhhh :)
+    public ShopKeeper shopKeeper;
     private void Awake()
     {
         buffManager = FindAnyObjectByType<BuffManager>();

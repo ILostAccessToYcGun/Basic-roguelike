@@ -852,12 +852,20 @@ PrefabInstance:
       objectReference: {fileID: 1271006322}
     - target: {fileID: 7382623101649840388, guid: 41752bd142cd0b1438b127234ed350a0, type: 3}
       propertyPath: stages.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7382623101649840388, guid: 41752bd142cd0b1438b127234ed350a0, type: 3}
       propertyPath: stages.Array.data[0]
       value: 
       objectReference: {fileID: 962958920984584431, guid: 615e33146d2b0834499a000f1fcee455, type: 3}
+    - target: {fileID: 7382623101649840388, guid: 41752bd142cd0b1438b127234ed350a0, type: 3}
+      propertyPath: stages.Array.data[1]
+      value: 
+      objectReference: {fileID: 8460351449306580757, guid: 17ebc8e8c8731f940a997715f33d9122, type: 3}
+    - target: {fileID: 7382623101649840388, guid: 41752bd142cd0b1438b127234ed350a0, type: 3}
+      propertyPath: stages.Array.data[2]
+      value: 
+      objectReference: {fileID: 6158385645983399873, guid: e18ff56b8b63c8b4e99ac3cdbafef901, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1806,11 +1814,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3883635046754019744, guid: edbdabb5c1d4e7149bb8ea08cb70e529, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 34.91
       objectReference: {fileID: 0}
     - target: {fileID: 3883635046754019744, guid: edbdabb5c1d4e7149bb8ea08cb70e529, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.95
+      value: -0.82
       objectReference: {fileID: 0}
     - target: {fileID: 3883635046754019744, guid: edbdabb5c1d4e7149bb8ea08cb70e529, type: 3}
       propertyPath: m_LocalPosition.z

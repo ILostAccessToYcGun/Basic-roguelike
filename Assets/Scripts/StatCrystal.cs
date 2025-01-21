@@ -20,79 +20,101 @@ public class StatCrystal : Crystals
             Mathf.Floor((float)buffManager.REGChance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%";
     }
 
+    private void ChangeStat(BuffManager.UnitStats stat, int modifier)
+    {
+        //                               not sure about this one
+        if (shopKeeper.GetTotalStatDifference() + modifier < shopKeeper.allocationLimit + 1)
+        {
+            buffManager.ChangeStatChance(stat, modifier);
+            UpdateStatChanceUI();
+
+            switch (stat)
+            {
+                case BuffManager.UnitStats.MaxHP:
+                    shopKeeper.saMaxHP+= modifier;
+                    break;
+                case BuffManager.UnitStats.ATK:
+                    shopKeeper.saATK += modifier;
+                    break;
+                case BuffManager.UnitStats.SPD:
+                    shopKeeper.saSPD += modifier;
+                    break;
+                case BuffManager.UnitStats.DEF:
+                    shopKeeper.saDEF += modifier;
+                    break;
+                case BuffManager.UnitStats.ATKSPD:
+                    shopKeeper.saATKSPD += modifier;
+                    break;
+                case BuffManager.UnitStats.JUMP:
+                    shopKeeper.saJUMP += modifier;
+                    break;
+                case BuffManager.UnitStats.REG:
+                    shopKeeper.saREG += modifier;
+                    break;
+            }
+
+            //TODO: add a way to select your upgrades before locking them in?
+        }
+    }
+
     public void HPPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.MaxHP, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.MaxHP, 1);
     }
     public void HPMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.MaxHP, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.MaxHP, -1);
     }
     public void ATKPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.ATK, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.ATK, 1);
     }
     public void ATKMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.ATK, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.ATK, -1);
     }
 
     public void SPDPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.SPD, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.SPD, 1);
     }
     public void SPDMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.SPD, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.SPD, -1);
     }
 
     public void DEFPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.DEF, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.DEF, 1);
     }
     public void DEFMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.DEF, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.DEF, -1);
     }
 
     public void ATKSPDPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.ATKSPD, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.ATKSPD, 1);
     }
     public void ATKSPDMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.ATKSPD, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.ATKSPD, -1);
     }
-
     public void JUMPPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.JUMP, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.JUMP, 1);
     }
     public void JUMPMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.JUMP, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.JUMP, -1);
     }
 
     public void REGPlus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.REG, 1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.REG, 1);
     }
     public void REGMinus()
     {
-        buffManager.ChangeStatChance(BuffManager.UnitStats.REG, -1);
-        UpdateStatChanceUI();
+        ChangeStat(BuffManager.UnitStats.REG, -1);
     }
 }
