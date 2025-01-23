@@ -23,28 +23,48 @@ public class RarityCrystal : Crystals
     private void ChangeRarity(BuffManager.Grade grade, int modifier) 
     {
         //TODO: THIS NEEDS A LOT OF WORK
-        int check = 0;
+        bool allowStatChange = false;
         switch (grade)
         {
             case BuffManager.Grade.Common:
-                check = shopKeeper.saCommon + modifier;
+                if (!((shopKeeper.saCommon < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
+                    (shopKeeper.saCommon > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
+                {
+                    allowStatChange = true;
+                }
                 break;
             case BuffManager.Grade.Uncommon:
-                check = shopKeeper.saUncommon + modifier;
+                if (!((shopKeeper.saUncommon < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
+                    (shopKeeper.saUncommon > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
+                {
+                    allowStatChange = true;
+                }
                 break;
             case BuffManager.Grade.Rare:
-                check = shopKeeper.saRare + modifier;
+                if (!((shopKeeper.saRare < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
+                    (shopKeeper.saRare > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
+                {
+                    allowStatChange = true;
+                }
                 break;
             case BuffManager.Grade.Epic:
-                check = shopKeeper.saEpic + modifier;
+                if (!((shopKeeper.saEpic < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
+                    (shopKeeper.saEpic > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
+                {
+                    allowStatChange = true;
+                }
                 break;
             case BuffManager.Grade.Legendary:
-                check = shopKeeper.saLegendary + modifier;
+                if (!((shopKeeper.saLegendary < 0 && modifier < 0) || (shopKeeper.saLegendary > 0 && modifier > 0)))
+                {
+                    if (Mathf.Abs(shopKeeper.saLegendary) != shopKeeper.allocationLimit)
+                        allowStatChange = true;
+                }
                 break;
         }
 
 
-        if (Mathf.Abs(check) < shopKeeper.allocationLimit)
+        if (allowStatChange )
         {
             buffManager.ChangeGradeChance(grade, modifier);
             UpdateRarityChanceUI();
