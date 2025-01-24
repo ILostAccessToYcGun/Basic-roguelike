@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class ShopKeeper : HoverableInteractables
 {
-    public GameObject DialogueUI;
-    public GameObject InteractUI;
-    public TextMeshProUGUI DialogueText;
+    public GameObject dialogueUI;
+    public GameObject interactUI;
+    public GameObject confirmStatsUI;
+    public TextMeshProUGUI dialogueText;
+    public BuffManager buffManager;
     public bool isTalking;
     private float dialogueTimer;
 
@@ -31,6 +33,13 @@ public class ShopKeeper : HoverableInteractables
 
     public int allocationLimit;
 
+    public enum ShopPurchase { None, Buff, Crystal};
+    public ShopPurchase purchase;
+
+    public TextMeshProUGUI pointsAllocatedText;
+
+    public StatCrystal statCrystal;
+    public RarityCrystal rarityCrystal;
 
     public int GetTotalStatDifference()
     {
@@ -58,22 +67,71 @@ public class ShopKeeper : HoverableInteractables
 
     public void ChangeDialogueText(string dialogue)
     {
-        DialogueText.text = dialogue;
+        dialogueText.text = dialogue;
     }
 
     public void InteractWithShopKeeper()
     {
         isTalking = true;
-        dialogueTimer = 3f;
-        InteractUI.SetActive(false);
-        cam.RemovePOI(InteractUI);
-        DialogueUI.SetActive(true);
-        cam.AddPOI(DialogueUI);
+        if (GetTotalStatDifference() > 0 && purchase == ShopPurchase.None)
+        {
+            pointsAllocatedText.text = GetTotalStatDifference() + "/" + allocationLimit + " Points Allocated";
+            dialogueTimer = 10f;
+            interactUI.SetActive(false);
+            cam.RemovePOI(interactUI);
+            confirmStatsUI.SetActive(true);
+            cam.AddPOI(confirmStatsUI);
+        }
+        else
+        {
+            switch (purchase)
+            {
+                case ShopPurchase.None:
+                    ChangeDialogueText("See what you need.");
+                    dialogueTimer = 3f;
+                    interactUI.SetActive(false);
+                    cam.RemovePOI(interactUI);
+                    dialogueUI.SetActive(true);
+                    cam.AddPOI(dialogueUI);
+                    break;
+                case ShopPurchase.Buff:
+                    ChangeDialogueText("Hope you like the Buff!");
+                    dialogueTimer = 3f;
+                    interactUI.SetActive(false);
+                    cam.RemovePOI(interactUI);
+                    dialogueUI.SetActive(true);
+                    cam.AddPOI(dialogueUI);
+                    break;
+                case ShopPurchase.Crystal:
+                    ChangeDialogueText("Interesting Choice...");
+                    dialogueTimer = 3f;
+                    interactUI.SetActive(false);
+                    cam.RemovePOI(interactUI);
+                    dialogueUI.SetActive(true);
+                    cam.AddPOI(dialogueUI);
+                    break;
+            }
+        }
+    }
+
+    public void SetShopPurchase(ShopPurchase newPurchase)
+    {
+        if (purchase == ShopPurchase.None)
+        {
+            purchase = newPurchase;
+            if (purchase != ShopPurchase.Crystal)
+            {
+                statCrystal.RevertToActual();
+                rarityCrystal.RevertToActual();
+                Debug.Log("aaaaaa");
+            }
+        }
     }
 
     private void Awake()
     {
         cam = FindAnyObjectByType<CameraMovement>();
+        buffManager = FindAnyObjectByType<BuffManager>();
         SetAllocationLimit(3);
 
         saCommon = 0;
@@ -88,15 +146,18 @@ public class ShopKeeper : HoverableInteractables
         saATKSPD = 0;
         saJUMP = 0;
         saREG = 0;
+
+        buffManager.SetCurrentShop(this);
+
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (!isTalking && InteractUI.activeSelf == false)
+            if (!isTalking && interactUI.activeSelf == false)
             {
-                InteractUI.SetActive(true);
-                cam.AddPOI(InteractUI);
+                interactUI.SetActive(true);
+                cam.AddPOI(interactUI);
             }
             distanceToPlayer = Mathf.Abs(collision.gameObject.transform.position.x - transform.position.x);
             CalculateFade();
@@ -114,10 +175,41 @@ public class ShopKeeper : HoverableInteractables
         {
             if (isTalking)
             {
-                DialogueUI.SetActive(false);
-                cam.RemovePOI(DialogueUI);
+                dialogueUI.SetActive(false);
+                confirmStatsUI.SetActive(false);
+                cam.RemovePOI(dialogueUI);
+                cam.RemovePOI(confirmStatsUI);
                 isTalking = false;
             }
         }
+
     }
+
+    #region ShopKeeper UI Methods
+
+    public void LockInStats()
+    {
+        confirmStatsUI.SetActive(false);
+        statCrystal.ConvertPreviewToActual();
+        rarityCrystal.ConvertPreviewToActual();
+
+        allocationLimit = 0;
+        SetShopPurchase(ShopPurchase.Crystal);
+        buffManager.ClearAllAliveBuffs();
+        
+    }
+
+    public void NuhUh()
+    {
+        confirmStatsUI.SetActive(false);
+        ChangeDialogueText("Not to your taste?..");
+        dialogueTimer = 3f;
+        interactUI.SetActive(false);
+        cam.RemovePOI(interactUI);
+        dialogueUI.SetActive(true);
+        cam.AddPOI(dialogueUI);
+    }
+
+    #endregion
+
 }

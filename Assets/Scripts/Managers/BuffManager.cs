@@ -18,8 +18,6 @@ public class BuffManager : MonoBehaviour
     public enum UnitStats { MaxHP, ATK, SPD, DEF, ATKSPD, JUMP, REG }
     //public enum GameStats { EnemyCount, StageSize }//?
 
-    //this is for later when I let the player manipulate stat odds
-    public int statChance;
 
     public int GradeCommonChance;
     public int GradeUncommonChance;
@@ -40,6 +38,9 @@ public class BuffManager : MonoBehaviour
     public BuffSpawnLocation[] buffLocations;
     public int buffLocationIndex = 0;
     public List<GameObject> buffsAlive;
+
+    public ShopKeeper currentShop;
+      
     private void Awake()
     {
         ResetProbabilities();
@@ -124,8 +125,24 @@ public class BuffManager : MonoBehaviour
             buffsAlive.Remove(buffsAlive[i]);
         }
         buffsAlive.Clear();
+
+        if (currentShop != null)
+        {
+            if (currentShop.purchase == ShopKeeper.ShopPurchase.None)
+            {
+                currentShop.SetShopPurchase(ShopKeeper.ShopPurchase.Buff);
+                currentShop.allocationLimit = 0;
+            }
+            
+        }
+        else
+            Debug.Log("HUH");
     }
     
+    public void SetCurrentShop(ShopKeeper newShop)
+    {
+        currentShop = newShop;
+    }
 
     //I'm not sure how I want to do the chances, whether everything should add up to 100, or do addative chance
     //for now, because its easy it will do addative chance

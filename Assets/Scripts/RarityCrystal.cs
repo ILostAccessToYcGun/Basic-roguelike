@@ -8,65 +8,137 @@ public class RarityCrystal : Crystals
 
     private void Start()
     {
+        TransferStatsFromBuffManagerToPreview();
         UpdateRarityChanceUI();
         cam = FindAnyObjectByType<CameraMovement>();
     }
     public void UpdateRarityChanceUI()
     {
-        percentages.text = Mathf.Floor((float)buffManager.GradeCommonChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.GradeUncommonChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.GradeRareChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.GradeEpicChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%<br>" +
-            Mathf.Floor((float)buffManager.GradeLegendaryChance / (float)buffManager.GradeTotalChance * 1000f) / 10 + "%";
+        if (shopKeeper.purchase == ShopKeeper.ShopPurchase.None)
+        {
+            //TODO: optimize this code later
+            if (psGradeCommonChance > buffManager.GradeCommonChance)
+                percentages[0].color = moreColour;
+            else if (psGradeCommonChance < buffManager.GradeCommonChance)
+                percentages[0].color = lessColour;
+            else
+                percentages[0].color = Color.black;
+
+            if (psGradeUncommonChance > buffManager.GradeUncommonChance)
+                percentages[1].color = moreColour;
+            else if (psGradeUncommonChance < buffManager.GradeUncommonChance)
+                percentages[1].color = lessColour;
+            else
+                percentages[1].color = Color.black;
+
+            if (psGradeRareChance > buffManager.GradeRareChance)
+                percentages[2].color = moreColour;
+            else if (psGradeRareChance < buffManager.GradeRareChance)
+                percentages[2].color = lessColour;
+            else
+                percentages[2].color = Color.black;
+
+            if (psGradeEpicChance > buffManager.GradeEpicChance)
+                percentages[3].color = moreColour;
+            else if (psGradeEpicChance < buffManager.GradeEpicChance)
+                percentages[3].color = lessColour;
+            else
+                percentages[3].color = Color.black;
+
+            if (psGradeLegendaryChance > buffManager.GradeLegendaryChance)
+                percentages[4].color = moreColour;
+            else if (psGradeLegendaryChance < buffManager.GradeLegendaryChance)
+                percentages[4].color = lessColour;
+            else
+                percentages[4].color = Color.black;
+        }
+        else
+        {
+            for (int i = 0; i < percentages.Count; i++)
+            {
+                percentages[i].color = Color.black;
+            }
+        }
+            
+        for (int i = 0; i < percentages.Count; i++)
+        {
+            float chance = 0f;
+            switch (i)
+            {
+                case 0:
+                    chance = (float)psGradeCommonChance;
+                    break;
+                case 1:
+                    chance = (float)psGradeUncommonChance;
+                    break;
+                case 2:
+                    chance = (float)psGradeRareChance;
+                    break;
+                case 3:
+                    chance = (float)psGradeEpicChance;
+                    break;
+                case 4:
+                    chance = (float)psGradeLegendaryChance;
+                    break;
+            }
+            percentages[i].text = Mathf.Floor(chance / (float)psGradeTotalChance * 1000f) / 10 + "%";
+        }
     }
 
     private void ChangeRarity(BuffManager.Grade grade, int modifier) 
     {
-        //TODO: THIS NEEDS A LOT OF WORK
         bool allowStatChange = false;
         switch (grade)
         {
             case BuffManager.Grade.Common:
-                if (!((shopKeeper.saCommon < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
-                    (shopKeeper.saCommon > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
-                {
+                if (shopKeeper.GetTotalStatDifference() != shopKeeper.allocationLimit)
                     allowStatChange = true;
+                else
+                {
+                    if (!((shopKeeper.saCommon < 0 && modifier < 0) || (shopKeeper.saCommon > 0 && modifier > 0) || shopKeeper.saCommon == 0))
+                        allowStatChange = true;
                 }
                 break;
             case BuffManager.Grade.Uncommon:
-                if (!((shopKeeper.saUncommon < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
-                    (shopKeeper.saUncommon > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
-                {
+                if (shopKeeper.GetTotalStatDifference() != shopKeeper.allocationLimit)
                     allowStatChange = true;
+                else
+                {
+                    if (!((shopKeeper.saUncommon < 0 && modifier < 0) || (shopKeeper.saUncommon > 0 && modifier > 0) || shopKeeper.saUncommon == 0))
+                        allowStatChange = true;
                 }
                 break;
             case BuffManager.Grade.Rare:
-                if (!((shopKeeper.saRare < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
-                    (shopKeeper.saRare > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
-                {
+                if (shopKeeper.GetTotalStatDifference() != shopKeeper.allocationLimit)
                     allowStatChange = true;
+                else
+                {
+                    if (!((shopKeeper.saRare < 0 && modifier < 0) || (shopKeeper.saRare > 0 && modifier > 0) || shopKeeper.saRare == 0))
+                        allowStatChange = true;
                 }
                 break;
             case BuffManager.Grade.Epic:
-                if (!((shopKeeper.saEpic < 0 && modifier < 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit) ||
-                    (shopKeeper.saEpic > 0 && modifier > 0) && (shopKeeper.GetTotalStatDifference() < shopKeeper.allocationLimit)))
-                {
+                if (shopKeeper.GetTotalStatDifference() != shopKeeper.allocationLimit)
                     allowStatChange = true;
+                else
+                {
+                    if (!((shopKeeper.saEpic < 0 && modifier < 0) || (shopKeeper.saEpic > 0 && modifier > 0) || shopKeeper.saEpic == 0))
+                        allowStatChange = true;
                 }
                 break;
             case BuffManager.Grade.Legendary:
-                if (!((shopKeeper.saLegendary < 0 && modifier < 0) || (shopKeeper.saLegendary > 0 && modifier > 0)))
+                if (shopKeeper.GetTotalStatDifference() != shopKeeper.allocationLimit)
+                    allowStatChange = true;
+                else
                 {
-                    if (Mathf.Abs(shopKeeper.saLegendary) != shopKeeper.allocationLimit)
+                    if (!((shopKeeper.saLegendary < 0 && modifier < 0) || (shopKeeper.saLegendary > 0 && modifier > 0) || shopKeeper.saLegendary == 0))
                         allowStatChange = true;
                 }
                 break;
         }
-
-
-        if (allowStatChange )
+        if (allowStatChange)
         {
-            buffManager.ChangeGradeChance(grade, modifier);
+            PSChangeGradeChance(grade, modifier);
             UpdateRarityChanceUI();
             switch (grade)
             {
@@ -90,6 +162,20 @@ public class RarityCrystal : Crystals
         }
     }
 
+
+    public void ConvertPreviewToActual()
+    {
+        ReverseTransferFromPreviewToBuffManager();
+        UpdateRarityChanceUI();
+    }
+
+    public void RevertToActual()
+    {
+        TransferStatsFromBuffManagerToPreview();
+        UpdateRarityChanceUI();
+    }
+
+    #region Crystal UI Methods
     public void CommonPlus()
     {
         ChangeRarity(BuffManager.Grade.Common, 1);
@@ -106,7 +192,6 @@ public class RarityCrystal : Crystals
     {
         ChangeRarity(BuffManager.Grade.Uncommon, -1);
     }
-
     public void RarePlus()
     {
         ChangeRarity(BuffManager.Grade.Rare, 1);
@@ -115,7 +200,6 @@ public class RarityCrystal : Crystals
     {
         ChangeRarity(BuffManager.Grade.Rare, -1);
     }
-
     public void EpicPlus()
     {
         ChangeRarity(BuffManager.Grade.Epic, 1);
@@ -124,7 +208,6 @@ public class RarityCrystal : Crystals
     {
         ChangeRarity(BuffManager.Grade.Epic, -1);
     }
-
     public void LegendaryPlus()
     {
         ChangeRarity(BuffManager.Grade.Legendary, 1);
@@ -133,4 +216,5 @@ public class RarityCrystal : Crystals
     {
         ChangeRarity(BuffManager.Grade.Legendary, -1);
     }
+    #endregion
 }
