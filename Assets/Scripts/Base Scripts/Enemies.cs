@@ -17,9 +17,6 @@ public class Enemies : Units
     public enum AI { Roaming, Aggro }
     protected AI currentAI;
 
-    /// <summary>
-    /// Line of Sight Check
-    /// </summary>
     public void LOStoPlayer()
     {
         if (!player.IsDestroyed())
@@ -48,14 +45,31 @@ public class Enemies : Units
         if (CurrentHP <= 0)
         {
             stageManager.UpdateEnemyCount(-1);
+            rsManager.IncrementTotalEnemiesKilled();
             Destroy(gameObject);
         }
+    }
+
+    public void InitializeEnemyStats()
+    {
+        ITEM = Weapons.None;
+        currentAI = AI.Roaming;
+
+        player = FindObjectOfType<Characters>();
+        stageManager = FindAnyObjectByType<StageManager>();
+        stageManager.UpdateEnemyCount(1);
+
+        visionLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
             player.TakeDamage(f_ATK);
+            rsManager.IncreaseTotalDamageRecieved(f_ATK);
+        }
+            
     }
 }
 

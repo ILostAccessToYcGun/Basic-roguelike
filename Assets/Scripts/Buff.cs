@@ -232,9 +232,10 @@ public class Buff : HoverableInteractables
         //    else if (stat.unitStat == BuffManager.UnitStats.jHGHT)
         //        player.f_jHeight += stat.buffValue;
         //}
-        uiManager.UpdatePlayerStatsUI();
+        uiManager.PlayerStats_UpdatePlayerStatsUI();
         //buffManager.buffsAlive.Remove(this.gameObject);
         //Destroy(gameObject);
+        buffManager.rsManager.IncrementTotalBuffsConsumed();
         buffManager.ClearAllAliveBuffs();
     }
 

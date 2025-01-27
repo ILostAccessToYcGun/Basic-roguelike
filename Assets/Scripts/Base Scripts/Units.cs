@@ -62,6 +62,8 @@ public class Units : MonoBehaviour
     //UI
     public Slider hpBar;
 
+    protected RunStatisticsManager rsManager;
+
     
 
     protected virtual void InitializeStats()
@@ -88,8 +90,11 @@ public class Units : MonoBehaviour
 
         hpBar = GetComponentInChildren<Slider>();
         UpdateHPBar();
+
+        rsManager = FindAnyObjectByType<RunStatisticsManager>();
     }
 
+    //TODO: I will need to do some stuff here, so moving into walls doesnt look scuffed
     protected void MoveRight()
     { gameObject.transform.position += new Vector3(1, 0, 0) * f_SPD * Time.deltaTime; }
 
@@ -228,6 +233,11 @@ public class Units : MonoBehaviour
         CurrentHP -= damageSource;
         UpdateHPBar();
         isAttacked = true;
+
+        if (this.gameObject.layer == LayerMask.NameToLayer("Player"))
+            rsManager.IncreaseTotalDamageRecieved(damageSource);
+        else if (this.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            rsManager.IncreaseTotalDamageDealt(damageSource);
     }
 
 
@@ -239,6 +249,11 @@ public class Units : MonoBehaviour
         else
             CurrentHP += healSource;
         UpdateHPBar();
+        if (this.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            rsManager.IncreaseTotalDamageHealed(healSource);
+        }
+
     }
 
     //every point of regen regenerates 0.2f health per second

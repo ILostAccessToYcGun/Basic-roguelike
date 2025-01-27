@@ -40,10 +40,15 @@ public class BuffManager : MonoBehaviour
     public List<GameObject> buffsAlive;
 
     public ShopKeeper currentShop;
+    public RunStatisticsManager rsManager;
+    private GameManager gameManager;
       
     private void Awake()
     {
         ResetProbabilities();
+        rsManager = FindAnyObjectByType<RunStatisticsManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager.SetBuffManager(this);
     }
 
     public void PickBuffStat(BuffStat bs)

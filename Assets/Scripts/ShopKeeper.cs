@@ -41,6 +41,8 @@ public class ShopKeeper : HoverableInteractables
     public StatCrystal statCrystal;
     public RarityCrystal rarityCrystal;
 
+    private RunStatisticsManager rsManager;
+
     public int GetTotalStatDifference()
     {
         int total = 0;
@@ -132,6 +134,7 @@ public class ShopKeeper : HoverableInteractables
     {
         cam = FindAnyObjectByType<CameraMovement>();
         buffManager = FindAnyObjectByType<BuffManager>();
+        rsManager = FindAnyObjectByType<RunStatisticsManager>();
         SetAllocationLimit(3);
 
         saCommon = 0;
@@ -190,6 +193,7 @@ public class ShopKeeper : HoverableInteractables
     public void LockInStats()
     {
         confirmStatsUI.SetActive(false);
+        rsManager.IncrementTotalChancePointsAllocated(GetTotalStatDifference());
         statCrystal.ConvertPreviewToActual();
         rarityCrystal.ConvertPreviewToActual();
 

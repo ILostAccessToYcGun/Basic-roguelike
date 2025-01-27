@@ -8,7 +8,7 @@ public class RarityCrystal : Crystals
 
     private void Start()
     {
-        TransferStatsFromBuffManagerToPreview();
+        TransferGradeStatsFromBuffManagerToPreview();
         UpdateRarityChanceUI();
         cam = FindAnyObjectByType<CameraMovement>();
     }
@@ -162,17 +162,62 @@ public class RarityCrystal : Crystals
         }
     }
 
-
     public void ConvertPreviewToActual()
     {
-        ReverseTransferFromPreviewToBuffManager();
+        ReverseGradeTransferFromPreviewToBuffManager();
         UpdateRarityChanceUI();
     }
 
     public void RevertToActual()
     {
-        TransferStatsFromBuffManagerToPreview();
+        TransferGradeStatsFromBuffManagerToPreview();
         UpdateRarityChanceUI();
+    }
+    protected void TransferGradeStatsFromBuffManagerToPreview()
+    {
+        psGradeCommonChance = buffManager.GradeCommonChance;
+        psGradeUncommonChance = buffManager.GradeUncommonChance;
+        psGradeRareChance = buffManager.GradeRareChance;
+        psGradeEpicChance = buffManager.GradeEpicChance;
+        psGradeLegendaryChance = buffManager.GradeLegendaryChance;
+        psGradeTotalChance = buffManager.GradeTotalChance;
+    }
+    protected void ReverseGradeTransferFromPreviewToBuffManager()
+    {
+        buffManager.GradeCommonChance = psGradeCommonChance;
+        buffManager.GradeUncommonChance = psGradeUncommonChance;
+        buffManager.GradeRareChance = psGradeRareChance;
+        buffManager.GradeEpicChance = psGradeEpicChance;
+        buffManager.GradeLegendaryChance = psGradeLegendaryChance;
+        buffManager.GradeTotalChance = psGradeTotalChance;
+    }
+
+    public void PSChangeGradeChance(Grade grade, int chanceModifier)
+    {
+        switch (grade)
+        {
+            case Grade.Common:
+                if (psGradeCommonChance + chanceModifier >= 0)
+                    psGradeCommonChance += chanceModifier;
+                break;
+            case Grade.Uncommon:
+                if (psGradeUncommonChance + chanceModifier >= 0)
+                    psGradeUncommonChance += chanceModifier;
+                break;
+            case Grade.Rare:
+                if (psGradeRareChance + chanceModifier >= 0)
+                    psGradeRareChance += chanceModifier;
+                break;
+            case Grade.Epic:
+                if (psGradeLegendaryChance + chanceModifier >= 0)
+                    psGradeEpicChance += chanceModifier;
+                break;
+            case Grade.Legendary:
+                if (psGradeLegendaryChance + chanceModifier >= 0)
+                    psGradeLegendaryChance += chanceModifier;
+                break;
+        }
+        psGradeTotalChance = psGradeCommonChance + psGradeUncommonChance + psGradeRareChance + psGradeEpicChance + psGradeLegendaryChance;
     }
 
     #region Crystal UI Methods

@@ -303,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 1715090819}
     - target: {fileID: 3210711892464218453, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ButtonQuit
+      value: MainMenu_ButtonQuit
       objectReference: {fileID: 0}
     - target: {fileID: 5303273484586043100, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_Name
@@ -311,7 +311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5303273484586043100, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6182000462128788089, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -319,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 1715090819}
     - target: {fileID: 6182000462128788089, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ButtonSettings
+      value: MainMenu_ButtonSettings
       objectReference: {fileID: 0}
     - target: {fileID: 6613777545941862486, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_Pivot.x
@@ -407,7 +407,7 @@ PrefabInstance:
       objectReference: {fileID: 1715090819}
     - target: {fileID: 6895166026316217420, guid: 042ca5c4bc3e90642b9693b8382696ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ButtonPlay
+      value: MainMenu_ButtonPlay
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -647,7 +647,7 @@ PrefabInstance:
       objectReference: {fileID: 1715090819}
     - target: {fileID: 7766250093114849256, guid: 05822056b92988e4d86111e3396e3caa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ButtonBack
+      value: Settings_ButtonBack
       objectReference: {fileID: 0}
     - target: {fileID: 8726087137063148214, guid: 05822056b92988e4d86111e3396e3caa, type: 3}
       propertyPath: m_AnchorMax.y

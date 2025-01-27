@@ -165,15 +165,7 @@ public class NormalEnemy : Enemies
         WGHT = 3;
 
         InitializeStats();
-
-        ITEM = Weapons.None;
-        currentAI = AI.Roaming;
-
-        player = FindObjectOfType<Characters>();
-        stageManager = FindAnyObjectByType<StageManager>();
-        stageManager.UpdateEnemyCount(1);
-
-        visionLayerMasks = LayerMask.GetMask("Player", "Ground", "Wall"); //I feel like I should generalize this here
+        InitializeEnemyStats();
 
         visionRange = 10f;
 

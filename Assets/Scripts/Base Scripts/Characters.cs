@@ -22,6 +22,7 @@ public class Characters : Units
         base.InitializeStats();
         uiManager = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
+        gameManager.SetPlayer(this);
     }
 
     protected void Movement()
@@ -75,13 +76,13 @@ public class Characters : Units
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (gameManager.currentGameState == GameManager.GameState.In_Game)
+            if (gameManager.currentGameState == GameManager.GameState.Gameplay)
             {
                 gameManager.ChangeGameState(GameManager.GameState.Paused);
             }
             else if (gameManager.currentGameState == GameManager.GameState.Paused)
             {
-                gameManager.ChangeGameState(GameManager.GameState.In_Game);
+                gameManager.ChangeGameState(GameManager.GameState.Gameplay);
             }
 
 
@@ -118,8 +119,10 @@ public class Characters : Units
         if (CurrentHP <= 0)
         {
             //change the game state in the game manager
+            gameManager.ChangeGameState(GameManager.GameState.Dead);
+            uiManager.UpdateRunStatistics();
             Debug.Log("ur actually so bad at this game");
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 

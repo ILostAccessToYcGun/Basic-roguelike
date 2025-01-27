@@ -6,6 +6,7 @@ public class Sword : MonoBehaviour
 {
     public NormalEnemy enemyScript;
     private Broadsword playerScript;
+    //private RunStatisticsManager rsManager;
 
     public List<Enemies> tagList;
     public bool isTagInList;
@@ -13,6 +14,7 @@ public class Sword : MonoBehaviour
     private void Awake()
     {
         playerScript = GetComponentInParent<Broadsword>();
+        //rsManager = FindAnyObjectByType<RunStatisticsManager>();
     }
 
     public void ResetTags()

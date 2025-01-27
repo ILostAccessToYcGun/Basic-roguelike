@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     private StageManager stageManager;
     private Characters player;
     private GameManager gameManager;
+    private RunStatisticsManager rsManager;
     
     
 
@@ -23,6 +24,9 @@ public class UIManager : MonoBehaviour
         stageManager = FindAnyObjectByType<StageManager>();
         player = FindAnyObjectByType<Characters>();
         gameManager = FindAnyObjectByType<GameManager>();
+        gameManager.SetUIManager(this);
+        rsManager = FindAnyObjectByType<RunStatisticsManager>();
+
 
         if (StageClearUI != null )
         {
@@ -76,29 +80,30 @@ public class UIManager : MonoBehaviour
 
     #region MainMenuUI
     public GameObject MainMenuUI;
-    public void MainMenuToggle(bool turnOn)
+    public void MainMenu_Toggle(bool turnOn)
     {
         MainMenuUI.SetActive(turnOn);
     } 
 
-    public void ButtonQuit()
+    public void MainMenu_ButtonQuit()
     {
         Debug.Log("Quit");
         Application.Quit();
     }
     
-    public void ButtonSettings()
+    public void MainMenu_ButtonSettings()
     {
         Debug.Log("Settings");
-        MainMenuToggle(false);
-        SettingsToggle(true);
+        MainMenu_Toggle(false);
+        Settings_Toggle(true);
     }
 
-    public void ButtonPlay()
+    public void MainMenu_ButtonPlay()
     {
         Debug.Log("Play");
-        //gameManager.ChangeGameState(GameManager.GameState.In_Game);
+        
         SceneManager.LoadScene("TestStage", LoadSceneMode.Single);
+        gameManager.ChangeGameState(GameManager.GameState.Gameplay);
         //changeScene
     }
 
@@ -106,28 +111,29 @@ public class UIManager : MonoBehaviour
 
     #region PauseMenuUI
     public GameObject PauseMenuUI;
-    public void PauseMenuToggle(bool turnOn)
+    public void PauseMenu_Toggle(bool turnOn)
     {
         PauseMenuUI.SetActive(turnOn);
     }
 
-    public void ButtonResume()
+    public void PauseMenu_ButtonResume()
     {
         Debug.Log("Resume");
-        gameManager.ChangeGameState(GameManager.GameState.In_Game);
+        gameManager.ChangeGameState(GameManager.GameState.Gameplay);
     }
 
-    public void ButtonReturnToMainMenu()
+    public void PauseMenu_ButtonReturnToMainMenu()
     {
         Debug.Log("ReturnToMainMenu");
         gameManager.ChangeGameState(GameManager.GameState.Main_Menu);
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
     }
 
-    public void ButtonPlayerStats()
+    public void PauseMenu_ButtonPlayerStats()
     {
         Debug.Log("PlayerStats");
-        PlayerStatsUIToggle(true);
-        PauseMenuToggle(false);
+        PlayerStats_Toggle(true);
+        PauseMenu_Toggle(false);
         //no change game state, player stats will be part of the pause game state
         //TODO: maybe just move the camera to be centered on the player
     }
@@ -135,28 +141,28 @@ public class UIManager : MonoBehaviour
 
     #region SettingsUI
     public GameObject SettingsUI;
-    public void SettingsToggle(bool turnOn)
+    public void Settings_Toggle(bool turnOn)
     {
         SettingsUI.SetActive(turnOn);
     }
 
-    public void ButtonBack()
+    public void Settings_ButtonBack()
     {
         Debug.Log("Back");
-        SettingsToggle(false);
-        MainMenuToggle(true);
+        Settings_Toggle(false);
+        MainMenu_Toggle(true);
     }
     #endregion
 
     #region EliminateEnemiesUI
     public GameObject EliminateEnemiesUI;
     public TextMeshProUGUI eliminateCount;
-    public void EliminateEnemiesUIToggle(bool turnOn)
+    public void EliminateEnemies_Toggle(bool turnOn)
     {
         EliminateEnemiesUI.SetActive(turnOn);
     }
 
-    public void UpdateUIEnemyCounter()
+    public void EliminateEnemies_UpdateUIEnemyCounter()
     {
         eliminateCount.text = "Enemies Remaining: " + stageManager.enemiesAlive;
     }
@@ -165,12 +171,12 @@ public class UIManager : MonoBehaviour
     #region SurviveUI
     public GameObject SurviveUI;
     public TextMeshProUGUI surviveTimer;
-    public void SurviveUIToggle(bool turnOn)
+    public void Survive_Toggle(bool turnOn)
     {
         SurviveUI.SetActive(turnOn);
     }
 
-    public void UpdateUISurviveTimer()
+    public void Survive_UpdateUISurviveTimer()
     {
         surviveTimer.text = "Time Remaining: " + Mathf.Floor(stageManager.timeToSurvive * 10) / 10;
     }
@@ -185,7 +191,7 @@ public class UIManager : MonoBehaviour
     private bool fadeBool;
     private float fadeTimer;
     //private bool hasFadedin;
-    public void StageCleared()
+    public void StageClear_StageCleared()
     {
         
         //tempPanelColor.a = 0f;
@@ -195,11 +201,11 @@ public class UIManager : MonoBehaviour
 
         if (SurviveUI.activeSelf == true)
         {
-            SurviveUIToggle(false);
+            Survive_Toggle(false);
         }
         if (EliminateEnemiesUI.activeSelf == true)
         {
-            EliminateEnemiesUIToggle(false);
+            EliminateEnemies_Toggle(false);
         }
 
         StageClearUI.SetActive(true);
@@ -245,12 +251,12 @@ public class UIManager : MonoBehaviour
     #region PlayerStatsUI
     public GameObject PlayerStatsUI;
     public TextMeshProUGUI StatText;
-    public void PlayerStatsUIToggle(bool turnOn)
+    public void PlayerStats_Toggle(bool turnOn)
     {
         PlayerStatsUI.SetActive(turnOn);
     }
     
-    public void UpdatePlayerStatsUI()
+    public void PlayerStats_UpdatePlayerStatsUI()
     {
         StatText.text = "HP: " + player.f_MaxHP +  // i think the issyue nulkl ref is for the player
             "<br>ATK: " + player.f_ATK + 
@@ -263,4 +269,42 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    #region GameOverUI
+    public GameObject GameOverUI;
+    public TextMeshProUGUI RunStatisticsText;
+
+    public void GameOver_Toggle(bool turnOn)
+    {
+        GameOverUI.SetActive(turnOn);
+    }
+
+    public void GameOver_ButtonReturnToMainMenu()
+    {
+        Debug.Log("ReturnToMainMenu");
+        gameManager.ChangeGameState(GameManager.GameState.Main_Menu);
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+    }
+
+    public void GameOver_Retry()
+    {
+        Debug.Log("Retry");
+        gameManager.ChangeGameState(GameManager.GameState.Gameplay);
+        SceneManager.LoadScene("TestStage", LoadSceneMode.Single);
+
+    }
+
+    public void UpdateRunStatistics()
+    {
+        RunStatisticsText.text = "Character: " + rsManager.GetCharacterType() +
+            "\nStages Cleared: " + gameManager.GetStageCount() +
+            "\nRun Time: " + (Mathf.Floor(rsManager.GetRunTime() * 100f)/ 100f) + "s" +
+            "\nEnemies Killed: " + rsManager.GetTotalEnemiesKilled() +
+            "\nDamage Dealt: " + rsManager.GetTotalDamageDealt() +
+            "\nDamage Recieved: " + rsManager.GetTotalDamageRecieved() +
+            "\nDamage Healed: " + rsManager.GetTotalDamageHealed() +
+            "\nBuffs Consumed: " + rsManager.GetTotalBuffsConsumed() +
+            "\nChance Points Allocated: " + rsManager.GetTotalChancePointsAllocated();
+    }
+
+    #endregion
 }

@@ -133,11 +133,14 @@ public class Broadsword : Characters
 
         isSwingingSword = false;
         swordSwingRange = 45;
+
+        
     }
 
     private void Start()
     {
-        uiManager.UpdatePlayerStatsUI(); //grrrrrrrrrr
+        uiManager.PlayerStats_UpdatePlayerStatsUI(); //grrrrrrrrrr
+        rsManager.SetCharacterType("Broadsword");
     }
 
     private void Update()

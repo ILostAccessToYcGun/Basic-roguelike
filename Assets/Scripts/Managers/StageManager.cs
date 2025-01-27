@@ -34,7 +34,7 @@ public class StageManager : MonoBehaviour
     public void UpdateEnemyCount(int update)
     {
         enemiesAlive += update;
-        uiManager.UpdateUIEnemyCounter();
+        uiManager.EliminateEnemies_UpdateUIEnemyCounter();
         CheckClearCondition();
     }
 
@@ -76,11 +76,11 @@ public class StageManager : MonoBehaviour
                 //SET TIME 
                 //TODO: THESE VALUES WILL NEED TO BE TESTED AND CHANGED LATER
                 timeToSurvive = Random.Range(20, 40);
-                uiManager.SurviveUIToggle(true);
+                uiManager.Survive_Toggle(true);
                 targetEnemyCount = randomEnemyCount / 2;
                 break;
             case ClearCondition.Eliminate:
-                uiManager.EliminateEnemiesUIToggle(true);
+                uiManager.EliminateEnemies_Toggle(true);
                 targetEnemyCount = randomEnemyCount;
                 break;
         }
@@ -91,7 +91,7 @@ public class StageManager : MonoBehaviour
     {
         isStageCleared = true;
         currentClrCon = ClearCondition.Intermission;
-        uiManager.StageCleared();
+        uiManager.StageClear_StageCleared();
         spawner.enabled = false;
         foreach (Door door in stageDoors)
         {
@@ -188,13 +188,13 @@ public class StageManager : MonoBehaviour
         buffManager = FindAnyObjectByType<BuffManager>();
         uiManager = FindAnyObjectByType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
+        gameManager.SetStageManager(this);
 
 
         allStagePOIs.Add(new Vector2(0, 0));
         pointOfReference = FindAnyObjectByType<PointOfReference>();
         MoveToPointOfReference();
         SpawnStage();
-        Debug.Log("e");
 
         //BeginStage();
 
@@ -207,7 +207,7 @@ public class StageManager : MonoBehaviour
             if (currentClrCon == ClearCondition.Survive)
             {
                 timeToSurvive -= Time.deltaTime;
-                uiManager.UpdateUISurviveTimer();
+                uiManager.Survive_UpdateUISurviveTimer();
                 CheckClearCondition();
                 if (enemiesAlive < targetEnemyCount)
                 {

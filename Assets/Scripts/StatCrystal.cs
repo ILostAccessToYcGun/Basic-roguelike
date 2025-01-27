@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static BuffManager;
 
 public class StatCrystal : Crystals
 {
     
     private void Start()
     {
-        TransferStatsFromBuffManagerToPreview();
+        TransferUnitStatsFromBuffManagerToPreview();
         UpdateStatChanceUI();
         cam = FindAnyObjectByType<CameraMovement>();
     }
@@ -102,7 +103,7 @@ public class StatCrystal : Crystals
                     chance = (float)psREGChance;
                     break;
             }
-            percentages[i].text = Mathf.Floor(chance / (float)buffManager.StatTotalChance * 1000f) / 10 + "%";
+            percentages[i].text = Mathf.Floor(chance / (float)psStatTotalChance * 1000f) / 10 + "%";
         }
     }
 
@@ -209,13 +210,70 @@ public class StatCrystal : Crystals
 
     public void ConvertPreviewToActual()
     {
-        ReverseTransferFromPreviewToBuffManager();
+        ReverseStatTransferFromPreviewToBuffManager();
         UpdateStatChanceUI();
     }
     public void RevertToActual()
     {
-        TransferStatsFromBuffManagerToPreview();
+        TransferUnitStatsFromBuffManagerToPreview();
         UpdateStatChanceUI();
+    }
+    protected void TransferUnitStatsFromBuffManagerToPreview()
+    {
+        psMaxHPChance = buffManager.MaxHPChance;
+        psATKChance = buffManager.ATKChance;
+        psSPDChance = buffManager.SPDChance;
+        psDEFChance = buffManager.DEFChance;
+        psATKSPDChance = buffManager.ATKSPDChance;
+        psJUMPChance = buffManager.JUMPChance;
+        psREGChance = buffManager.REGChance;
+        psStatTotalChance = buffManager.StatTotalChance;
+    }
+    protected void ReverseStatTransferFromPreviewToBuffManager()
+    {
+        buffManager.MaxHPChance = psMaxHPChance;
+        buffManager.ATKChance = psATKChance;
+        buffManager.SPDChance = psSPDChance;
+        buffManager.DEFChance = psDEFChance;
+        buffManager.ATKSPDChance = psATKSPDChance;
+        buffManager.JUMPChance = psJUMPChance;
+        buffManager.REGChance = psREGChance;
+        buffManager.StatTotalChance = psStatTotalChance;
+    }
+    public void PSChangeStatChance(UnitStats stat, int chanceModifier)
+    {
+        switch (stat)
+        {
+            case UnitStats.MaxHP:
+                if (psMaxHPChance + chanceModifier >= 0)
+                    psMaxHPChance += chanceModifier;
+                break;
+            case UnitStats.ATK:
+                if (psATKChance + chanceModifier >= 0)
+                    psATKChance += chanceModifier;
+                break;
+            case UnitStats.SPD:
+                if (psSPDChance + chanceModifier >= 0)
+                    psSPDChance += chanceModifier;
+                break;
+            case UnitStats.DEF:
+                if (psDEFChance + chanceModifier >= 0)
+                    psDEFChance += chanceModifier;
+                break;
+            case UnitStats.ATKSPD:
+                if (psATKSPDChance + chanceModifier >= 0)
+                    psATKSPDChance += chanceModifier;
+                break;
+            case UnitStats.JUMP:
+                if (psJUMPChance + chanceModifier >= 0)
+                    psJUMPChance += chanceModifier;
+                break;
+            case UnitStats.REG:
+                if (psREGChance + chanceModifier >= 0)
+                    psREGChance += chanceModifier;
+                break;
+        }
+        psStatTotalChance = psMaxHPChance + psATKChance + psSPDChance + psDEFChance + psATKSPDChance + psJUMPChance + psREGChance;
     }
 
     #region Crystal UI Methods
