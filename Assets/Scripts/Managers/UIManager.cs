@@ -288,6 +288,7 @@ public class UIManager : MonoBehaviour
     public void GameOver_Retry()
     {
         Debug.Log("Retry");
+        player.Heal(player.f_MaxHP);//bruh
         gameManager.ChangeGameState(GameManager.GameState.Gameplay);
         SceneManager.LoadScene("TestStage", LoadSceneMode.Single);
 

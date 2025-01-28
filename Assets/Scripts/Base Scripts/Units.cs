@@ -89,7 +89,9 @@ public class Units : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         hpBar = GetComponentInChildren<Slider>();
+        hpBar.interactable = false;
         UpdateHPBar();
+        
 
         rsManager = FindAnyObjectByType<RunStatisticsManager>();
     }
@@ -269,11 +271,15 @@ public class Units : MonoBehaviour
             //    Heal(flatRegen);
             //}
             //maybe later if the regen is too high, we change increase the base heal from 1 to 2, etc
-            Heal(1);
-            if (f_REG != 0)
-                regenTimer = 5f / f_REG;
-            else
-                regenTimer = 5f;
+            if (CurrentHP < MaxHP)
+            {
+                Heal(1);
+                if (f_REG != 0)
+                    regenTimer = 5f / f_REG;
+                else
+                    regenTimer = 5f;
+            }
+            
         }
         else
             regenTimer-= Time.deltaTime;

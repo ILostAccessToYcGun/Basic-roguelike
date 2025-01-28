@@ -65,11 +65,7 @@ public class Enemies : Units
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
             player.TakeDamage(f_ATK);
-            rsManager.IncreaseTotalDamageRecieved(f_ATK);
-        }
-            
     }
 }
 

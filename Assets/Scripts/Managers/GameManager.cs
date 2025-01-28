@@ -88,10 +88,11 @@ public class GameManager : MonoBehaviour
                 //huh
                 break;
             case GameState.Dead:
-                player.Heal(player.f_MaxHP);//bruh
+                
                 uiManager.GameOver_Toggle(false);
                 Time.timeScale = 1f;
                 //disable UI
+                
                 break;
         }
 

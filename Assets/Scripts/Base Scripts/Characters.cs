@@ -119,8 +119,8 @@ public class Characters : Units
         if (CurrentHP <= 0)
         {
             //change the game state in the game manager
-            gameManager.ChangeGameState(GameManager.GameState.Dead);
             uiManager.UpdateRunStatistics();
+            gameManager.ChangeGameState(GameManager.GameState.Dead);
             Debug.Log("ur actually so bad at this game");
             //Destroy(gameObject);
         }
